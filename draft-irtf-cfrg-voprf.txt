@@ -550,9 +550,9 @@ Internet-Draft                    OPRFs                   September 2020
    In this section, we detail the APIs available on the client and
    server OPRF contexts.  This document uses the types "Element" and
    "Scalar" to denote elements of the group "GG" and its underlying
-   scalar field, respectively.  For notational clarity, "PublicKey" and
-   "PrivateKey" are items of type "Element" and "Scalar", respectively.
-
+   scalar field "GF(p)", respectively.  For notational clarity,
+   "PublicKey" is an item of type "Element" and "PrivateKey" is an item
+   of type "Scalar".
 
 
 
@@ -566,13 +566,13 @@ Internet-Draft                    OPRFs                   September 2020
 
    The ServerContext encapsulates the context string constructed during
    setup and the OPRF key pair.  It has two functions, "Evaluate" and
-   "VerifyFinalize", described below.  "Evaluate" takes as input
-   serialized representations of blinded group elements from the client.
+   "VerifyFinalize", described below.  "Evaluate" takes serialized
+   representations of blinded group elements from the client as inputs.
    "VerifyFinalize" takes ClientInput values and their corresponding
-   output digests from "Verify" and returns true if the inputs match the
-   outputs.  Note that "VerifyFinalize" is not used in the main OPRF
-   protocol.  It is exposed as an API for building higher-level
-   protocols.
+   output digests from "Verify" as input, and returns true if the inputs
+   match the outputs.  Note that "VerifyFinalize" is not used in the
+   main OPRF protocol.  It is exposed as an API for building higher-
+   level protocols.
 
 3.4.1.1.  Evaluate
 
@@ -650,7 +650,7 @@ Internet-Draft                    OPRFs                   September 2020
    The VerifiableServerContext extends the base ServerContext with an
    augmented "Evaluate()" function.  This function produces a proof that
    "skS" was used in computing the result.  It makes use of the helper
-   functions "ComputeComposites" and "GenerateProof", described below.
+   functions "GenerateProof" and "ComputeComposites", described below.
 
 3.4.2.1.  Evaluate
 
@@ -1122,7 +1122,8 @@ Davidson, et al.          Expires 1 April 2021                 [Page 20]
 Internet-Draft                    OPRFs                   September 2020
 
 
-   [[OPEN ISSUE: Replace Curve25519 and Curve448 with Ristretto/Decaf]]
+   [[OPEN ISSUE: Replace Curve25519 and Curve448 with Ristretto and
+   Decaf]]
 
 4.1.  OPRF(curve25519, SHA-512)
 
@@ -1169,7 +1170,6 @@ Internet-Draft                    OPRFs                   September 2020
    *  Group:
 
       -  Elliptic curve: curve448 [RFC7748]
-
 
 
 
