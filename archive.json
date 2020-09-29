@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-09-27T00:27:43.026169+00:00",
+  "timestamp": "2020-09-29T00:26:54.425631+00:00",
   "repo": "cfrg/draft-irtf-cfrg-voprf",
   "labels": [
     {
@@ -1931,9 +1931,17 @@
       "labels": [],
       "body": "If folks deploy experimental systems using VOPRF drafts, the fact that the DST uses \"RFCXXXX\" might break domain separation between drafts. HPKE used to use the same placeholder but switched to \"HPKE-05\", etc., with an RFC editor note:\r\n\r\n> [[RFC editor: please change \"HPKE-05\" to \"RFCXXXX\", where XXXX is the final number, before publication.]]\r\n\r\nSee https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/138.\r\n\r\nPerhaps VOPRF should do something similar here.",
       "createdAt": "2020-09-23T21:22:54Z",
-      "updatedAt": "2020-09-23T21:22:54Z",
+      "updatedAt": "2020-09-29T00:11:44Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Agreed. Should it be changed @chris-wood ?",
+          "createdAt": "2020-09-29T00:11:43Z",
+          "updatedAt": "2020-09-29T00:11:43Z"
+        }
+      ]
     },
     {
       "number": 144,
@@ -1956,15 +1964,15 @@
       "id": "MDU6SXNzdWU3MDgzMTkxODU=",
       "title": "Cite TLS presentation language",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/issues/145",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "davidben",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "The Data Structures section includes a bunch of structures in what appear to be TLS presentation language. I assume this is intended to define serializations. That should probably cite RFC8446, which defines the syntax.",
       "createdAt": "2020-09-24T16:40:01Z",
-      "updatedAt": "2020-09-24T16:40:01Z",
-      "closedAt": null,
+      "updatedAt": "2020-09-28T17:46:18Z",
+      "closedAt": "2020-09-28T17:46:18Z",
       "comments": []
     },
     {
@@ -1979,9 +1987,17 @@
       "labels": [],
       "body": "hashInput in Finalize and VerifyFinalize is computed as:\r\n\r\n```\r\n  hashInput = len(token.data) || token.data ||\r\n              len(issuedToken) || issuedToken ||\r\n              len(info) || info ||\r\n              len(finalizeDST) || finalizeDST\r\n  return Hash(hashInput)\r\n```\r\n\r\nBut the lengths are integers, not byte strings. I assume this was intended to say `I2OSP(len(...), ???)`. Given h1Input is also passed directly to Hash in ComputeComposites, I guess the lengths should all be two bytes, to be consistent.\r\n\r\n```\r\n  h1Input = I2OSP(len(gen), 2) || gen ||\r\n            I2OSP(len(pkS), 2) || pkS ||\r\n            I2OSP(len(blindTokens), 2) || blindTokens ||\r\n            I2OSP(len(elements), 2) || elements ||\r\n            I2OSP(len(seedDST), 2) || seedDST\r\n  seed = Hash(h1Input)\r\n```\r\n\r\nThough it's worth noting that injectivity here depends on the DSTs being suffix-free, or on *all* the length prefixes having the same size. If, say, hashInput used `I2OSP(len(token.data), 4)`, hashInput and h1Input would no longer be injective for all possible values here. (Ignoring the part where DSTs in this document are suffix-free.)\r\n\r\nThis reminds of https://github.com/cfrg/draft-irtf-cfrg-hash-to-curve/issues/236. (Hrm... do we care about domain separation between the hash calls here and those inside hash-to-curve? That might suggest the DST constructions should match. Although that is really a theoretical issue since the DSTs are indeed suffix-free.)",
       "createdAt": "2020-09-25T13:52:52Z",
-      "updatedAt": "2020-09-25T13:54:18Z",
+      "updatedAt": "2020-09-29T00:10:28Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Yes, I agree on this. I see no place, also, where a different length will be used other than `I2OSP(len(x), 2)`",
+          "createdAt": "2020-09-29T00:10:28Z",
+          "updatedAt": "2020-09-29T00:10:28Z"
+        }
+      ]
     },
     {
       "number": 147,
@@ -1995,9 +2011,24 @@
       "labels": [],
       "body": "GenerateProof incorporates `gen = GG.Serialize(G)` into the HashToScalar call, but the context string already includes the cipher suite ID, which covers all the common parameters, notably the generator. It seems to me that can be omitted.",
       "createdAt": "2020-09-25T18:17:54Z",
-      "updatedAt": "2020-09-25T18:17:54Z",
+      "updatedAt": "2020-09-29T00:14:14Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Mmm.. while true that through that the context string contains the suite.ID, this is only an id value, although it indeed recognises the suite. But I don't think the generator was included as a parameter for `HashToScalar` to recognise the suite, but rather to differentiate the hash. \r\n\r\nI'm not sure why it was historically introduced.. maybe @chris-wood , @alxdavids or @armfazh will know.",
+          "createdAt": "2020-09-29T00:04:04Z",
+          "updatedAt": "2020-09-29T00:04:04Z"
+        },
+        {
+          "author": "davidben",
+          "authorAssociation": "NONE",
+          "body": "Right, I thought all that needed there was for different suites' hash invocations to use different inputs. The suite is identified by ID, which is hashed, and the generator is specified by the suite, so it seems the generator is covered. \r\n\r\n(Disclaimer: I don't actually know how the formal analyses work, so my intuition could just be totally wrong. :-) )",
+          "createdAt": "2020-09-29T00:14:14Z",
+          "updatedAt": "2020-09-29T00:14:14Z"
+        }
+      ]
     },
     {
       "number": 148,
@@ -9436,26 +9467,97 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDkzNTc1NTY2",
       "title": "Cite TLS notation.",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/pull/149",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Closes #145.",
       "createdAt": "2020-09-26T13:13:44Z",
-      "updatedAt": "2020-09-26T13:13:45Z",
+      "updatedAt": "2020-09-28T17:46:18Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-voprf",
       "baseRefName": "master",
       "baseRefOid": "cd85b5938e1e3ee17e325fa1c598565f400f1473",
       "headRepository": "cfrg/draft-irtf-cfrg-voprf",
       "headRefName": "caw/cite-tls",
       "headRefOid": "6a0baff40109f92f558ac16f8c11f0137082c3e0",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-09-28T17:46:18Z",
+      "mergedAt": "2020-09-28T17:46:18Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "4773361d19f00550d58c35e92d074ceadd7891d7"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDk3NzU5MjE3",
+          "commit": {
+            "abbreviatedOid": "6a0baff"
+          },
+          "author": "armfazh",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-09-28T17:43:30Z",
+          "updatedAt": "2020-09-28T17:43:30Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 150,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDk0MjgzMjc1",
+      "title": "Grammar checks",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/pull/150",
+      "state": "MERGED",
+      "author": "claucece",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-09-28T17:01:52Z",
+      "updatedAt": "2020-09-28T17:46:51Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-voprf",
+      "baseRefName": "master",
+      "baseRefOid": "cd85b5938e1e3ee17e325fa1c598565f400f1473",
+      "headRepository": "claucece/draft-irtf-cfrg-voprf",
+      "headRefName": "master",
+      "headRefOid": "a0de89c8dc75ef8c51e2d0a0e8d2919c8f3fdb33",
+      "closedAt": "2020-09-28T17:46:51Z",
+      "mergedAt": "2020-09-28T17:46:51Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "3947f0563ce8db1f9a8bc8765989946ee52e3415"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDk3NzU4ODMy",
+          "commit": {
+            "abbreviatedOid": "a0de89c"
+          },
+          "author": "armfazh",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-09-28T17:42:59Z",
+          "updatedAt": "2020-09-28T17:42:59Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDk3NzYxNjAy",
+          "commit": {
+            "abbreviatedOid": "a0de89c"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-09-28T17:46:46Z",
+          "updatedAt": "2020-09-28T17:46:46Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
