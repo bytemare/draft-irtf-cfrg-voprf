@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-09-29T00:26:54.425631+00:00",
+  "timestamp": "2020-10-01T00:28:01.164399+00:00",
   "repo": "cfrg/draft-irtf-cfrg-voprf",
   "labels": [
     {
@@ -1931,7 +1931,7 @@
       "labels": [],
       "body": "If folks deploy experimental systems using VOPRF drafts, the fact that the DST uses \"RFCXXXX\" might break domain separation between drafts. HPKE used to use the same placeholder but switched to \"HPKE-05\", etc., with an RFC editor note:\r\n\r\n> [[RFC editor: please change \"HPKE-05\" to \"RFCXXXX\", where XXXX is the final number, before publication.]]\r\n\r\nSee https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/138.\r\n\r\nPerhaps VOPRF should do something similar here.",
       "createdAt": "2020-09-23T21:22:54Z",
-      "updatedAt": "2020-09-29T00:11:44Z",
+      "updatedAt": "2020-09-29T14:31:07Z",
       "closedAt": null,
       "comments": [
         {
@@ -1940,6 +1940,13 @@
           "body": "Agreed. Should it be changed @chris-wood ?",
           "createdAt": "2020-09-29T00:11:43Z",
           "updatedAt": "2020-09-29T00:11:43Z"
+        },
+        {
+          "author": "alxdavids",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This changes makes sense to me.",
+          "createdAt": "2020-09-29T14:31:06Z",
+          "updatedAt": "2020-09-29T14:31:06Z"
         }
       ]
     },
@@ -2043,6 +2050,86 @@
       "body": "Section 2.2 has two bullet points:\r\n\r\n>   o  We assume that all numbers are stored in big-endian orientation.\r\n>\r\n>   o  I2OSP and OS2IP: Convert a byte array to and from a non-negative\r\n>      integer as described in [RFC8017].  Note that these functions\r\n>      operate on byte arrays in big-endian byte order.\r\n\r\nThe second bullet point makes sense. When converting to and from byte array, you need to specify the endianness. I'm not sure what the first point means at all. Does the draft ever care about the in-memory representation of numbers? It needs to be explicit about I2OSP, etc., anyway to capture lengths (see #145 and #146), at which point I don't think how the number is \"stored\" means anything.",
       "createdAt": "2020-09-25T18:27:06Z",
       "updatedAt": "2020-09-25T18:27:06Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 151,
+      "id": "MDU6SXNzdWU3MTA2NjY1NTk=",
+      "title": "Can we remove the 'Addition' field on every ciphersuite?",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/issues/151",
+      "state": "OPEN",
+      "author": "claucece",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The 'Addition' field on every ciphersuite is always the same:\r\n\r\n```\r\n  - Addition: Adding curve points directly corresponds to the group\r\n    addition operation.\r\n```\r\n\r\nwe could perhaps remove it, as it is generally defined on the preliminaries.",
+      "createdAt": "2020-09-29T00:44:06Z",
+      "updatedAt": "2020-09-29T14:32:53Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "alxdavids",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yeah, we should refactor this out as a common operator for each ciphersuite",
+          "createdAt": "2020-09-29T14:32:53Z",
+          "updatedAt": "2020-09-29T14:32:53Z"
+        }
+      ]
+    },
+    {
+      "number": 152,
+      "id": "MDU6SXNzdWU3MTA2ODYyNzM=",
+      "title": "Correctly define the Scalar multiplication field for all cipher-suites",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/issues/152",
+      "state": "OPEN",
+      "author": "claucece",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Currently, only the `P-384`, `P-521` and `P-256` have the Scalar multiplication field defined. Might be good to expand this to 25519 and 448, specially, as they refer to RFC7748, which X25519 and X448 cannot be used for this draft, as they return only one of the coordinates.",
+      "createdAt": "2020-09-29T01:46:45Z",
+      "updatedAt": "2020-09-29T01:46:45Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 153,
+      "id": "MDU6SXNzdWU3MTEyMDI2MDk=",
+      "title": "How and when should the public key be generated?",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/issues/153",
+      "state": "OPEN",
+      "author": "claucece",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "While it is easy to assume how and when the public key is generated, there is no place in the draft that states so. Must be good to include its generation on the setup functions.",
+      "createdAt": "2020-09-29T15:00:49Z",
+      "updatedAt": "2020-09-29T15:03:18Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "it should probably be included here:\r\n\r\n```\r\ndef SetupBaseServer(suite):\r\n  (skS, _) = KeyGen(GG)\r\n  contextString = I2OSP(modeBase, 1) || I2OSP(suite.ID, 2)\r\n  return ServerContext(contextString, skS)\r\n\r\n```",
+          "createdAt": "2020-09-29T15:03:18Z",
+          "updatedAt": "2020-09-29T15:03:18Z"
+        }
+      ]
+    },
+    {
+      "number": 154,
+      "id": "MDU6SXNzdWU3MTEzNDAzMzY=",
+      "title": "Consider adding a FullEvaluate()  to Server Context API",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/issues/154",
+      "state": "OPEN",
+      "author": "tomrist",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Some applications will need to compute the full PRF on the server side, e.g., to precompute a bunch of OPRF outputs for use in private set intersection protocols. Can we consider adding to the server context API a FullEvaluate, along lines of:\r\n\r\nInput:\r\n\r\n  ClientInput input\r\n  opaque info<1..2^16-1>\r\n  PrivateKey skS\r\n  PublicKey pkS\r\n\r\nOutput:\r\n\r\n  opaque output<1..2^16-1>\r\n\r\ndef FullEvaluate(input, info, skS, pkS):\r\n  P = GG.HashToGroup(input)\r\n  N = skS * P\r\n  issuedToken = GG.serialize(N)\r\n  finalizeDST = \"RFCXXXX-Finalize-\" || self.contextString\r\n  hashInput = len(input) || input ||\r\n              len(issuedToken) || issuedToken ||\r\n              len(info) || info ||\r\n              len(finalizeDST) || finalizeDST\r\n  return Hash(hashInput)",
+      "createdAt": "2020-09-29T18:12:40Z",
+      "updatedAt": "2020-09-29T18:12:40Z",
       "closedAt": null,
       "comments": []
     }
