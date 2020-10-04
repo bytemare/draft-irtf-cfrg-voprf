@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-01T00:28:01.164399+00:00",
+  "timestamp": "2020-10-04T00:28:41.531141+00:00",
   "repo": "cfrg/draft-irtf-cfrg-voprf",
   "labels": [
     {
@@ -2130,6 +2130,24 @@
       "body": "Some applications will need to compute the full PRF on the server side, e.g., to precompute a bunch of OPRF outputs for use in private set intersection protocols. Can we consider adding to the server context API a FullEvaluate, along lines of:\r\n\r\nInput:\r\n\r\n  ClientInput input\r\n  opaque info<1..2^16-1>\r\n  PrivateKey skS\r\n  PublicKey pkS\r\n\r\nOutput:\r\n\r\n  opaque output<1..2^16-1>\r\n\r\ndef FullEvaluate(input, info, skS, pkS):\r\n  P = GG.HashToGroup(input)\r\n  N = skS * P\r\n  issuedToken = GG.serialize(N)\r\n  finalizeDST = \"RFCXXXX-Finalize-\" || self.contextString\r\n  hashInput = len(input) || input ||\r\n              len(issuedToken) || issuedToken ||\r\n              len(info) || info ||\r\n              len(finalizeDST) || finalizeDST\r\n  return Hash(hashInput)",
       "createdAt": "2020-09-29T18:12:40Z",
       "updatedAt": "2020-09-29T18:12:40Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 155,
+      "id": "MDU6SXNzdWU3MTM2NjIwOTc=",
+      "title": "Clarify HashToScalar",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/issues/155",
+      "state": "OPEN",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "chris-wood"
+      ],
+      "labels": [],
+      "body": "HashToScalar points to hash-to-field, but we should specify the modulus. See the relevant text in the draft:\r\n\r\n> The hash_to_field function is also suitable for securely hashing to scalars. For example, when hashing to scalars for an elliptic curve (sub)group with prime order r, it suffices to instantiate hash_to_curve with target field GF(r).",
+      "createdAt": "2020-10-02T14:24:29Z",
+      "updatedAt": "2020-10-02T14:24:33Z",
       "closedAt": null,
       "comments": []
     }
