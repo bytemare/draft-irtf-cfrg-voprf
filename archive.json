@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-04T00:28:41.531141+00:00",
+  "timestamp": "2020-10-08T00:23:41.342116+00:00",
   "repo": "cfrg/draft-irtf-cfrg-voprf",
   "labels": [
     {
@@ -9661,6 +9661,53 @@
           "createdAt": "2020-09-28T17:46:46Z",
           "updatedAt": "2020-09-28T17:46:46Z",
           "comments": []
+        }
+      ]
+    },
+    {
+      "number": 156,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDk4MjM2OTI4",
+      "title": "Clarify inputs for functions",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/pull/156",
+      "state": "OPEN",
+      "author": "claucece",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-10-06T03:22:40Z",
+      "updatedAt": "2020-10-06T06:47:13Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-voprf",
+      "baseRefName": "master",
+      "baseRefOid": "3947f0563ce8db1f9a8bc8765989946ee52e3415",
+      "headRepository": "claucece/draft-irtf-cfrg-voprf",
+      "headRefName": "master",
+      "headRefOid": "d3de1c5b019e2922a7bbd48c92831ed14f2f8b2b",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTAyNjI1MjI1",
+          "commit": {
+            "abbreviatedOid": "d3de1c5"
+          },
+          "author": "armfazh",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-06T06:43:14Z",
+          "updatedAt": "2020-10-06T06:47:13Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\nFor base mode, servers don't need the public key `pkS` produced by KeyGen.\r\n```",
+              "createdAt": "2020-10-06T06:43:14Z",
+              "updatedAt": "2020-10-06T06:47:13Z"
+            }
+          ]
         }
       ]
     }
