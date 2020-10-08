@@ -5,9 +5,9 @@
 Network Working Group                                        A. Davidson
 Internet-Draft                                          A. Faz-Hernandez
 Intended status: Informational                               N. Sullivan
-Expires: 1 April 2021                                          C.A. Wood
+Expires: 11 April 2021                                         C.A. Wood
                                                               Cloudflare
-                                                       28 September 2020
+                                                          8 October 2020
 
 
    Oblivious Pseudorandom Functions (OPRFs) using Prime-Order Groups
@@ -49,13 +49,13 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 April 2021.
+   This Internet-Draft will expire on 11 April 2021.
 
 
 
-Davidson, et al.          Expires 1 April 2021                  [Page 1]
+Davidson, et al.          Expires 11 April 2021                 [Page 1]
 
-Internet-Draft                    OPRFs                   September 2020
+Internet-Draft                    OPRFs                     October 2020
 
 
 Copyright Notice
@@ -84,15 +84,15 @@ Table of Contents
    3.  OPRF Protocol . . . . . . . . . . . . . . . . . . . . . . . .   7
      3.1.  Overview  . . . . . . . . . . . . . . . . . . . . . . . .   8
      3.2.  Context Setup . . . . . . . . . . . . . . . . . . . . . .   9
-     3.3.  Data Structures . . . . . . . . . . . . . . . . . . . . .   9
-     3.4.  Context APIs  . . . . . . . . . . . . . . . . . . . . . .  10
+     3.3.  Data Structures . . . . . . . . . . . . . . . . . . . . .  10
+     3.4.  Context APIs  . . . . . . . . . . . . . . . . . . . . . .  11
        3.4.1.  Server Context  . . . . . . . . . . . . . . . . . . .  11
        3.4.2.  VerifiableServerContext . . . . . . . . . . . . . . .  12
        3.4.3.  Client Context  . . . . . . . . . . . . . . . . . . .  16
        3.4.4.  VerifiableClientContext . . . . . . . . . . . . . . .  18
    4.  Ciphersuites  . . . . . . . . . . . . . . . . . . . . . . . .  20
      4.1.  OPRF(curve25519, SHA-512) . . . . . . . . . . . . . . . .  21
-     4.2.  OPRF(curve448, SHA-512) . . . . . . . . . . . . . . . . .  21
+     4.2.  OPRF(curve448, SHA-512) . . . . . . . . . . . . . . . . .  22
      4.3.  OPRF(P-256, SHA-512)  . . . . . . . . . . . . . . . . . .  22
      4.4.  OPRF(P-384, SHA-512)  . . . . . . . . . . . . . . . . . .  23
      4.5.  OPRF(P-521, SHA-512)  . . . . . . . . . . . . . . . . . .  24
@@ -103,26 +103,26 @@ Table of Contents
        5.2.2.  Protocol security . . . . . . . . . . . . . . . . . .  27
        5.2.3.  Q-strong-DH oracle  . . . . . . . . . . . . . . . . .  27
        5.2.4.  Implications for ciphersuite choices  . . . . . . . .  28
-     5.3.  Hashing to curve  . . . . . . . . . . . . . . . . . . . .  28
+     5.3.  Hashing to curve  . . . . . . . . . . . . . . . . . . . .  29
      5.4.  Timing Leaks  . . . . . . . . . . . . . . . . . . . . . .  29
      5.5.  Key rotation  . . . . . . . . . . . . . . . . . . . . . .  29
 
 
 
-Davidson, et al.          Expires 1 April 2021                  [Page 2]
+Davidson, et al.          Expires 11 April 2021                 [Page 2]
 
-Internet-Draft                    OPRFs                   September 2020
+Internet-Draft                    OPRFs                     October 2020
 
 
    6.  Additive blinding . . . . . . . . . . . . . . . . . . . . . .  29
      6.1.  Preprocess  . . . . . . . . . . . . . . . . . . . . . . .  30
-     6.2.  Blind . . . . . . . . . . . . . . . . . . . . . . . . . .  30
+     6.2.  Blind . . . . . . . . . . . . . . . . . . . . . . . . . .  31
      6.3.  Unblind . . . . . . . . . . . . . . . . . . . . . . . . .  31
        6.3.1.  Parameter Commitments . . . . . . . . . . . . . . . .  32
    7.  Contributors  . . . . . . . . . . . . . . . . . . . . . . . .  32
-   8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  32
-   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  32
-     9.1.  Normative References  . . . . . . . . . . . . . . . . . .  32
+   8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  33
+   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  33
+     9.1.  Normative References  . . . . . . . . . . . . . . . . . .  33
      9.2.  Informative References  . . . . . . . . . . . . . . . . .  35
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  35
 
@@ -165,9 +165,9 @@ Internet-Draft                    OPRFs                   September 2020
 
 
 
-Davidson, et al.          Expires 1 April 2021                  [Page 3]
+Davidson, et al.          Expires 11 April 2021                 [Page 3]
 
-Internet-Draft                    OPRFs                   September 2020
+Internet-Draft                    OPRFs                     October 2020
 
 
 1.1.  Change log
@@ -221,9 +221,9 @@ Internet-Draft                    OPRFs                   September 2020
 
 
 
-Davidson, et al.          Expires 1 April 2021                  [Page 4]
+Davidson, et al.          Expires 11 April 2021                 [Page 4]
 
-Internet-Draft                    OPRFs                   September 2020
+Internet-Draft                    OPRFs                     October 2020
 
 
    draft-01 (https://tools.ietf.org/html/draft-irtf-cfrg-voprf-01):
@@ -277,9 +277,9 @@ Internet-Draft                    OPRFs                   September 2020
 
 
 
-Davidson, et al.          Expires 1 April 2021                  [Page 5]
+Davidson, et al.          Expires 11 April 2021                 [Page 5]
 
-Internet-Draft                    OPRFs                   September 2020
+Internet-Draft                    OPRFs                     October 2020
 
 
    element "-A" such that "A + (-A) = (-A) + A = I".  Scalar
@@ -333,9 +333,9 @@ Internet-Draft                    OPRFs                   September 2020
 
 
 
-Davidson, et al.          Expires 1 April 2021                  [Page 6]
+Davidson, et al.          Expires 11 April 2021                 [Page 6]
 
-Internet-Draft                    OPRFs                   September 2020
+Internet-Draft                    OPRFs                     October 2020
 
 
    discrepancies with a prime-order group instantiation are removed.
@@ -389,9 +389,9 @@ Internet-Draft                    OPRFs                   September 2020
 
 
 
-Davidson, et al.          Expires 1 April 2021                  [Page 7]
+Davidson, et al.          Expires 11 April 2021                 [Page 7]
 
-Internet-Draft                    OPRFs                   September 2020
+Internet-Draft                    OPRFs                     October 2020
 
 
                         +================+=======+
@@ -445,9 +445,9 @@ Internet-Draft                    OPRFs                   September 2020
 
 
 
-Davidson, et al.          Expires 1 April 2021                  [Page 8]
+Davidson, et al.          Expires 11 April 2021                 [Page 8]
 
-Internet-Draft                    OPRFs                   September 2020
+Internet-Draft                    OPRFs                     October 2020
 
 
 3.2.  Context Setup
@@ -471,6 +471,9 @@ Internet-Draft                    OPRFs                   September 2020
    zero element in the scalar field "GG" and pkX is the product of skX
    and the group's fixed generator.
 
+   For base mode, servers do not need the public key "pkS" produced by
+   KeyGen.
+
    The verifiable mode setup functions for creating client and server
    contexts are below.
 
@@ -492,19 +495,23 @@ Internet-Draft                    OPRFs                   September 2020
    "suite.ID" in the pseudocode above, that identifies the suite.
    Section 4 lists these ciphersuite identifiers.
 
+
+
+
+
+
+
+Davidson, et al.          Expires 11 April 2021                 [Page 9]
+
+Internet-Draft                    OPRFs                     October 2020
+
+
 3.3.  Data Structures
 
    The following is a list of data structures that are defined for
    providing inputs and outputs for each of the context interfaces
    defined in Section 3.4.  Each data structure description uses TLS
    notation (see [RFC8446], Section 3).
-
-
-
-Davidson, et al.          Expires 1 April 2021                  [Page 9]
-
-Internet-Draft                    OPRFs                   September 2020
-
 
    The following types are a list of aliases that are used throughout
    the protocol.
@@ -545,6 +552,16 @@ Internet-Draft                    OPRFs                   September 2020
      Scalar proof<0...2^16-1>; /* only for modeVerifiable */
    } BatchedEvaluation;
 
+
+
+
+
+
+Davidson, et al.          Expires 11 April 2021                [Page 10]
+
+Internet-Draft                    OPRFs                     October 2020
+
+
 3.4.  Context APIs
 
    In this section, we detail the APIs available on the client and
@@ -553,14 +570,6 @@ Internet-Draft                    OPRFs                   September 2020
    scalar field "GF(p)", respectively.  For notational clarity,
    "PublicKey" is an item of type "Element" and "PrivateKey" is an item
    of type "Scalar".
-
-
-
-
-Davidson, et al.          Expires 1 April 2021                 [Page 10]
-
-Internet-Draft                    OPRFs                   September 2020
-
 
 3.4.1.  Server Context
 
@@ -579,14 +588,13 @@ Internet-Draft                    OPRFs                   September 2020
    Input:
 
      PrivateKey skS
-     PublicKey pkS
      SerializedElement blindToken
 
    Output:
 
      Evaluation Ev
 
-   def Evaluate(skS, pkS, blindToken):
+   def Evaluate(skS, blindToken):
      BT = GG.Deserialize(blindToken)
      Z = skS * BT
      serializedElement = GG.Serialize(Z)
@@ -605,23 +613,14 @@ Internet-Draft                    OPRFs                   September 2020
 
 
 
-
-
-
-
-
-
-
-
-Davidson, et al.          Expires 1 April 2021                 [Page 11]
+Davidson, et al.          Expires 11 April 2021                [Page 11]
 
-Internet-Draft                    OPRFs                   September 2020
+Internet-Draft                    OPRFs                     October 2020
 
 
    Input:
 
      PrivateKey skS
-     PublicKey pkS
      ClientInput input
      opaque info<1..2^16-1>
      opaque output<1..2^16-1>
@@ -630,10 +629,10 @@ Internet-Draft                    OPRFs                   September 2020
 
      boolean valid
 
-   def VerifyFinalize(skS, pkS, input, info, output):
+   def VerifyFinalize(skS, input, info, output):
      T = GG.HashToGroup(input)
      element = GG.Serialize(T)
-     issuedElement = Evaluate(skS, pkS, [element])
+     issuedElement = Evaluate(skS, [element])
      E = GG.Serialize(issuedElement)
 
      finalizeDST = "RFCXXXX-Finalize-" || client.contextString
@@ -669,9 +668,10 @@ Internet-Draft                    OPRFs                   September 2020
 
 
 
-Davidson, et al.          Expires 1 April 2021                 [Page 12]
+
+Davidson, et al.          Expires 11 April 2021                [Page 12]
 
-Internet-Draft                    OPRFs                   September 2020
+Internet-Draft                    OPRFs                     October 2020
 
 
    Input:
@@ -725,9 +725,9 @@ Internet-Draft                    OPRFs                   September 2020
 
 
 
-Davidson, et al.          Expires 1 April 2021                 [Page 13]
+Davidson, et al.          Expires 11 April 2021                [Page 13]
 
-Internet-Draft                    OPRFs                   September 2020
+Internet-Draft                    OPRFs                     October 2020
 
 
    Input:
@@ -781,9 +781,9 @@ Internet-Draft                    OPRFs                   September 2020
 
 
 
-Davidson, et al.          Expires 1 April 2021                 [Page 14]
+Davidson, et al.          Expires 11 April 2021                [Page 14]
 
-Internet-Draft                    OPRFs                   September 2020
+Internet-Draft                    OPRFs                     October 2020
 
 
 3.4.2.2.1.  Batching inputs
@@ -837,9 +837,9 @@ Internet-Draft                    OPRFs                   September 2020
 
 
 
-Davidson, et al.          Expires 1 April 2021                 [Page 15]
+Davidson, et al.          Expires 11 April 2021                [Page 15]
 
-Internet-Draft                    OPRFs                   September 2020
+Internet-Draft                    OPRFs                     October 2020
 
 
    Input:
@@ -893,9 +893,9 @@ Internet-Draft                    OPRFs                   September 2020
 
 
 
-Davidson, et al.          Expires 1 April 2021                 [Page 16]
+Davidson, et al.          Expires 11 April 2021                [Page 16]
 
-Internet-Draft                    OPRFs                   September 2020
+Internet-Draft                    OPRFs                     October 2020
 
 
    Input:
@@ -920,16 +920,14 @@ Internet-Draft                    OPRFs                   September 2020
 
    Input:
 
-     PublicKey pkS
      Token token
-     SerializedElement blindToken
      Evaluation Ev
 
    Output:
 
      SerializedElement issuedToken
 
-   def Unblind(pkS, token, blindToken, Ev):
+   def Unblind(token, Ev):
      r = token.blind
      Z = GG.Deserialize(Ev.element)
      N = (r^(-1)) * Z
@@ -949,9 +947,11 @@ Internet-Draft                    OPRFs                   September 2020
 
 
 
-Davidson, et al.          Expires 1 April 2021                 [Page 17]
+
+
+Davidson, et al.          Expires 11 April 2021                [Page 17]
 
-Internet-Draft                    OPRFs                   September 2020
+Internet-Draft                    OPRFs                     October 2020
 
 
    Input:
@@ -1005,9 +1005,9 @@ Internet-Draft                    OPRFs                   September 2020
 
 
 
-Davidson, et al.          Expires 1 April 2021                 [Page 18]
+Davidson, et al.          Expires 11 April 2021                [Page 18]
 
-Internet-Draft                    OPRFs                   September 2020
+Internet-Draft                    OPRFs                     October 2020
 
 
    Input:
@@ -1061,9 +1061,9 @@ Internet-Draft                    OPRFs                   September 2020
 
 
 
-Davidson, et al.          Expires 1 April 2021                 [Page 19]
+Davidson, et al.          Expires 11 April 2021                [Page 19]
 
-Internet-Draft                    OPRFs                   September 2020
+Internet-Draft                    OPRFs                     October 2020
 
 
    Input:
@@ -1091,11 +1091,12 @@ Internet-Draft                    OPRFs                   September 2020
 
 4.  Ciphersuites
 
-   A ciphersuite for the protocol wraps the functionality required for
-   the protocol to take place.  This ciphersuite should be available to
-   both the client and server, and agreement on the specific
-   instantiation is assumed throughout.  A ciphersuite contains
-   instantiations of the following functionalities.
+   A ciphersuite (also referred to as 'suite' in this document) for the
+   protocol wraps the functionality required for the protocol to take
+   place.  This ciphersuite should be available to both the client and
+   server, and agreement on the specific instantiation is assumed
+   throughout.  A ciphersuite contains instantiations of the following
+   functionalities:
 
    *  "GG": A prime-order group exposing the API detailed in
       Section 2.1.
@@ -1112,15 +1113,17 @@ Internet-Draft                    OPRFs                   September 2020
    We only provide ciphersuites in the elliptic curve setting as these
    provide the most efficient way of instantiating the OPRF.
 
+
+
+
+
+Davidson, et al.          Expires 11 April 2021                [Page 20]
+
+Internet-Draft                    OPRFs                     October 2020
+
+
    Applications should take caution in using ciphersuites targeting
    P-256 and curve25519.  See Section 5.2 for related discussion.
-
-
-
-Davidson, et al.          Expires 1 April 2021                 [Page 20]
-
-Internet-Draft                    OPRFs                   September 2020
-
 
    [[OPEN ISSUE: Replace Curve25519 and Curve448 with Ristretto and
    Decaf]]
@@ -1129,7 +1132,7 @@ Internet-Draft                    OPRFs                   September 2020
 
    *  Group:
 
-      -  Elliptic curve: curve25519 [RFC7748]
+      -  Elliptic curve name: curve25519 [RFC7748]
 
       -  Generator(): Return the point with the following affine
          coordinates:
@@ -1165,18 +1168,21 @@ Internet-Draft                    OPRFs                   September 2020
 
    *  ID: 0x0001
 
+
+
+
+
+
+Davidson, et al.          Expires 11 April 2021                [Page 21]
+
+Internet-Draft                    OPRFs                     October 2020
+
+
 4.2.  OPRF(curve448, SHA-512)
 
    *  Group:
 
-      -  Elliptic curve: curve448 [RFC7748]
-
-
-
-Davidson, et al.          Expires 1 April 2021                 [Page 21]
-
-Internet-Draft                    OPRFs                   September 2020
-
+      -  Elliptic curve name: curve448 [RFC7748]
 
       -  Generator(): Return the point with the following affine
          coordinates:
@@ -1217,22 +1223,22 @@ Internet-Draft                    OPRFs                   September 2020
 
    *  Group:
 
-      -  Elliptic curve: P-256 (secp256r1) [x9.62]
+      -  Elliptic curve name: P-256 (secp256r1) [x9.62]
+
+
+
+
+
+Davidson, et al.          Expires 11 April 2021                [Page 22]
+
+Internet-Draft                    OPRFs                     October 2020
+
 
       -  Generator(): Return the point with the following affine
          coordinates:
 
          o  x = "6B17D1F2E12C4247F8BCE6E563A440F277037D812DEB33A0F4A1394
             5D898C296"
-
-
-
-
-
-Davidson, et al.          Expires 1 April 2021                 [Page 22]
-
-Internet-Draft                    OPRFs                   September 2020
-
 
          o  y = "4FE342E2FE1A7F9B8EE7EB4A7C0F9E162BCE33576B315ECECBB6406
             837BF51F5"
@@ -1265,7 +1271,7 @@ Internet-Draft                    OPRFs                   September 2020
 
    *  Group:
 
-      -  Elliptic curve: P-384 (secp384r1) [x9.62]
+      -  Elliptic curve name: P-384 (secp384r1) [x9.62]
 
       -  Generator(): Return the point with the following affine
          coordinates:
@@ -1276,19 +1282,20 @@ Internet-Draft                    OPRFs                   September 2020
          o  y = "3617DE4A96262C6F5D9E98BF9292DC29F8F41DBD289A147CE9DA311
             3B5F0B8C00A60B1CE1D7E819D7A431D7C90EA0E5F"
 
+
+
+
+Davidson, et al.          Expires 11 April 2021                [Page 23]
+
+Internet-Draft                    OPRFs                     October 2020
+
+
       -  Order(): Returns "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
          FFFC7634D81F4372DDF581A0DB248B0A77AECEC196ACCC52973"
 
       -  HashToGroup(): P384_XMD:SHA-512_SSWU_RO_
          [I-D.irtf-cfrg-hash-to-curve] with DST "RFCXXXX-P384_XMD:SHA-
          512_SSWU_RO_"
-
-
-
-Davidson, et al.          Expires 1 April 2021                 [Page 23]
-
-Internet-Draft                    OPRFs                   September 2020
-
 
       -  HashToScalar(): Use hash_to_field from
          [I-D.irtf-cfrg-hash-to-curve] using Order() as the prime
@@ -1311,7 +1318,7 @@ Internet-Draft                    OPRFs                   September 2020
 
    *  Group:
 
-      -  Elliptic curve: P-521 (secp521r1) [x9.62]
+      -  Elliptic curve name: P-521 (secp521r1) [x9.62]
 
       -  Generator(): Return the point with the following affine
          coordinates:
@@ -1332,19 +1339,19 @@ Internet-Draft                    OPRFs                   September 2020
          [I-D.irtf-cfrg-hash-to-curve] with DST "RFCXXXX-P521_XMD:SHA-
          512_SSWU_RO_"
 
+
+
+Davidson, et al.          Expires 11 April 2021                [Page 24]
+
+Internet-Draft                    OPRFs                     October 2020
+
+
       -  HashToScalar(): Use hash_to_field from
          [I-D.irtf-cfrg-hash-to-curve] using Order() as the prime
          modulus, with L=98, and expand_message_xmd with SHA-512.
 
       -  Serialization: The compressed point encoding for the curve
          [SEC1] consisting of 67 bytes.
-
-
-
-Davidson, et al.          Expires 1 April 2021                 [Page 24]
-
-Internet-Draft                    OPRFs                   September 2020
-
 
       -  Addition: Adding curve points directly corresponds to the group
          addition operation.
@@ -1385,6 +1392,16 @@ Internet-Draft                    OPRFs                   September 2020
 
    An OPRF protocol must also satisfy the following property:
 
+
+
+
+
+
+Davidson, et al.          Expires 11 April 2021                [Page 25]
+
+Internet-Draft                    OPRFs                     October 2020
+
+
    *  Oblivious: The server must learn nothing about the client's input
       or the output of the function.  In addition, the client must learn
       nothing about the server's private key.
@@ -1393,14 +1410,6 @@ Internet-Draft                    OPRFs                   September 2020
    the client's input x at some point in the future, then the server
    will not be able to link any particular OPRF evaluation to x.  This
    property is also known as unlinkability [DGSTV18].
-
-
-
-
-Davidson, et al.          Expires 1 April 2021                 [Page 25]
-
-Internet-Draft                    OPRFs                   September 2020
-
 
    Optionally, for any protocol that satisfies the above properties,
    there is an additional security property:
@@ -1442,6 +1451,13 @@ Internet-Draft                    OPRFs                   September 2020
    Sample a uniformly random bit d in {0,1}. Given (G, aG, bG, C),
    where:
 
+
+
+Davidson, et al.          Expires 11 April 2021                [Page 26]
+
+Internet-Draft                    OPRFs                     October 2020
+
+
    *  G is a generator of GG;
 
    *  a,b are elements of FFp;
@@ -1449,14 +1465,6 @@ Internet-Draft                    OPRFs                   September 2020
    *  if d == 0: C = abG; else: C is sampled uniformly GG(sp).
 
    Output d' == d.
-
-
-
-
-Davidson, et al.          Expires 1 April 2021                 [Page 26]
-
-Internet-Draft                    OPRFs                   September 2020
-
 
 5.2.2.  Protocol security
 
@@ -1499,20 +1507,17 @@ Internet-Draft                    OPRFs                   September 2020
    oracle for constructing Q-strong-DH (Q-sDH) samples.  The Q-Strong-DH
    problem asks the following.
 
+
+
+Davidson, et al.          Expires 11 April 2021                [Page 27]
+
+Internet-Draft                    OPRFs                     October 2020
+
+
        Given G1, G2, h*G2, (h^2)*G2, ..., (h^Q)*G2; for G1 and G2
        generators of GG.
 
        Output ( (1/(k+c))*G1, c ) where c is an element of FFp
-
-
-
-
-
-
-Davidson, et al.          Expires 1 April 2021                 [Page 27]
-
-Internet-Draft                    OPRFs                   September 2020
-
 
    The assumption that this problem is hard was first introduced in
    [BB04].  Since then, there have been a number of cryptanalytic
@@ -1555,6 +1560,16 @@ Internet-Draft                    OPRFs                   September 2020
    lower than 128 bits, we recommend only implementing ciphersuites with
    IDs: 0x0002, 0x0004, and 0x0005.
 
+
+
+
+
+
+Davidson, et al.          Expires 11 April 2021                [Page 28]
+
+Internet-Draft                    OPRFs                     October 2020
+
+
 5.3.  Hashing to curve
 
    A critical requirement of implementing the prime-order group using
@@ -1562,13 +1577,6 @@ Internet-Draft                    OPRFs                   September 2020
    "GG.HashToGroup", that maps inputs to group elements.  In the
    elliptic curve setting, this deterministically maps inputs x (as byte
    arrays) to uniformly chosen points in the curve.
-
-
-
-Davidson, et al.          Expires 1 April 2021                 [Page 28]
-
-Internet-Draft                    OPRFs                   September 2020
-
 
    In the security proof of the construction Hash is modeled as a random
    oracle.  This implies that any instantiation of "GG.HashToGroup" must
@@ -1611,6 +1619,13 @@ Internet-Draft                    OPRFs                   September 2020
    additive blinding would be to instead compute "H(x) + (r * G)", where
    "G" is the fixed generator for the group "GG".
 
+
+
+Davidson, et al.          Expires 11 April 2021                [Page 29]
+
+Internet-Draft                    OPRFs                     October 2020
+
+
    The advantage of additive blinding is that it allows the client to
    pre-process tables of blinded scalar multiplications for "G".  This
    may give it a computational efficiency advantage (due to the fact
@@ -1618,14 +1633,6 @@ Internet-Draft                    OPRFs                   September 2020
    variable-base multiplication).  Pre-processing also reduces the
    amount of computation that needs to be done in the online exchange.
    Choosing one of these values "r * G" (where "r" is the scalar value
-
-
-
-Davidson, et al.          Expires 1 April 2021                 [Page 29]
-
-Internet-Draft                    OPRFs                   September 2020
-
-
    that is used), then computing "H(x) + (r * G)" is more efficient than
    computing "r * H(x)".  Therefore, it may be advantageous to define
    the OPRF and VOPRF protocols using additive blinding (rather than
@@ -1646,6 +1653,34 @@ Internet-Draft                    OPRFs                   September 2020
      SerializedElement blindedGenerator;
      SerializedElement blindedPublicKey;
    } PreprocessedBlind;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Davidson, et al.          Expires 11 April 2021                [Page 30]
+
+Internet-Draft                    OPRFs                     October 2020
+
 
    Input:
 
@@ -1671,17 +1706,6 @@ Internet-Draft                    OPRFs                   September 2020
 
 6.2.  Blind
 
-
-
-
-
-
-
-Davidson, et al.          Expires 1 April 2021                 [Page 30]
-
-Internet-Draft                    OPRFs                   September 2020
-
-
    Input:
 
      ClientInput input
@@ -1705,6 +1729,14 @@ Internet-Draft                    OPRFs                   September 2020
      return (token, blindToken)
 
 6.3.  Unblind
+
+
+
+
+Davidson, et al.          Expires 11 April 2021                [Page 31]
+
+Internet-Draft                    OPRFs                     October 2020
+
 
    Input:
 
@@ -1731,13 +1763,6 @@ Internet-Draft                    OPRFs                   September 2020
            = k * P + k * (r * G) - r * (k * G)
            = k * P
 
-
-
-Davidson, et al.          Expires 1 April 2021                 [Page 31]
-
-Internet-Draft                    OPRFs                   September 2020
-
-
    by the commutativity of scalar multiplication in GG.  This is the
    same output as in the "Unblind" algorithm for multiplicative
    blinding.
@@ -1762,6 +1787,13 @@ Internet-Draft                    OPRFs                   September 2020
 
    *  Chris Wood (caw@heapingbits.net)
 
+
+
+Davidson, et al.          Expires 11 April 2021                [Page 32]
+
+Internet-Draft                    OPRFs                     October 2020
+
+
    *  Eli-Shaoul Khedouri (eli@intuitionmachines.com)
 
    *  Armando Faz Hernandez (armfazh@cloudflare.com)
@@ -1782,17 +1814,6 @@ Internet-Draft                    OPRFs                   September 2020
 
    [BG04]     "The Static Diffie-Hellman Problem",
               <https://eprint.iacr.org/2004/306>.
-
-
-
-
-
-
-
-Davidson, et al.          Expires 1 April 2021                 [Page 32]
-
-Internet-Draft                    OPRFs                   September 2020
-
 
    [ChaumBlindSignature]
               "Blind Signatures for Untraceable Payments",
@@ -1819,6 +1840,16 @@ Internet-Draft                    OPRFs                   September 2020
               <https://tools.ietf.org/html/draft-davidson-pp-protocol-
               00>.
 
+
+
+
+
+
+Davidson, et al.          Expires 11 April 2021                [Page 33]
+
+Internet-Draft                    OPRFs                     October 2020
+
+
    [I-D.irtf-cfrg-hash-to-curve]
               Faz-Hernandez, A., Scott, S., Sullivan, N., Wahby, R., and
               C. Wood, "Hashing to Elliptic Curves", Work in Progress,
@@ -1841,14 +1872,6 @@ Internet-Draft                    OPRFs                   September 2020
    [keytrans] "Security Through Transparency",
               <https://security.googleblog.com/2017/01/security-through-
               transparency.html>.
-
-
-
-
-Davidson, et al.          Expires 1 April 2021                 [Page 33]
-
-Internet-Draft                    OPRFs                   September 2020
-
 
    [NIST]     "Keylength - NIST Report on Cryptographic Key Length and
               Cryptoperiod (2016)", <https://www.keylength.com/en/4/>.
@@ -1876,6 +1899,13 @@ Internet-Draft                    OPRFs                   September 2020
               DOI 10.17487/RFC5869, May 2010,
               <https://www.rfc-editor.org/info/rfc5869>.
 
+
+
+Davidson, et al.          Expires 11 April 2021                [Page 34]
+
+Internet-Draft                    OPRFs                     October 2020
+
+
    [RFC7748]  Langley, A., Hamburg, M., and S. Turner, "Elliptic Curves
               for Security", RFC 7748, DOI 10.17487/RFC7748, January
               2016, <https://www.rfc-editor.org/info/rfc7748>.
@@ -1896,15 +1926,6 @@ Internet-Draft                    OPRFs                   September 2020
    [SEC2]     Standards for Efficient Cryptography Group (SECG), ., "SEC
               2: Recommended Elliptic Curve Domain Parameters",
               <http://www.secg.org/sec2-v2.pdf>.
-
-
-
-
-
-Davidson, et al.          Expires 1 April 2021                 [Page 34]
-
-Internet-Draft                    OPRFs                   September 2020
-
 
    [SHAKE]    "SHA-3 Standard, Permutation-Based Hash and Extendable-
               Output Functions", <https://www.nist.gov/publications/sha-
@@ -1935,6 +1956,12 @@ Authors' Addresses
    Email: alex.davidson92@gmail.com
 
 
+
+Davidson, et al.          Expires 11 April 2021                [Page 35]
+
+Internet-Draft                    OPRFs                     October 2020
+
+
    Armando Faz-Hernandez
    Cloudflare
    101 Townsend St
@@ -1951,15 +1978,6 @@ Authors' Addresses
    United States of America
 
    Email: nick@cloudflare.com
-
-
-
-
-
-
-Davidson, et al.          Expires 1 April 2021                 [Page 35]
-
-Internet-Draft                    OPRFs                   September 2020
 
 
    Christopher A. Wood
@@ -1995,22 +2013,4 @@ Internet-Draft                    OPRFs                   September 2020
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Davidson, et al.          Expires 1 April 2021                 [Page 36]
+Davidson, et al.          Expires 11 April 2021                [Page 36]
