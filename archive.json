@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-08T00:23:41.342116+00:00",
+  "timestamp": "2020-10-11T00:30:09.441825+00:00",
   "repo": "cfrg/draft-irtf-cfrg-voprf",
   "labels": [
     {
@@ -2150,6 +2150,30 @@
       "updatedAt": "2020-10-02T14:24:33Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 157,
+      "id": "MDU6SXNzdWU3MTczOTAwMzA=",
+      "title": "Clarify the serialization to be used",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/issues/157",
+      "state": "OPEN",
+      "author": "claucece",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Specially, the tag to be used.",
+      "createdAt": "2020-10-08T14:19:52Z",
+      "updatedAt": "2020-10-08T15:56:26Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "armfazh",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I think this is implementation-dependant. most implementations follow ANSI X9.62.",
+          "createdAt": "2020-10-08T15:56:26Z",
+          "updatedAt": "2020-10-08T15:56:26Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -9669,24 +9693,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDk4MjM2OTI4",
       "title": "Clarify inputs for functions",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/pull/156",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "claucece",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2020-10-06T03:22:40Z",
-      "updatedAt": "2020-10-06T06:47:13Z",
+      "updatedAt": "2020-10-08T15:43:56Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-voprf",
       "baseRefName": "master",
       "baseRefOid": "3947f0563ce8db1f9a8bc8765989946ee52e3415",
       "headRepository": "claucece/draft-irtf-cfrg-voprf",
       "headRefName": "master",
-      "headRefOid": "d3de1c5b019e2922a7bbd48c92831ed14f2f8b2b",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "beefc37a0a70a94ca24b5391e4efb04aa8252ab0",
+      "closedAt": "2020-10-08T15:43:56Z",
+      "mergedAt": "2020-10-08T15:43:56Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "be81e97a16dac7fa0a6b93bda85e8c5d4a934740"
+      },
       "comments": [],
       "reviews": [
         {
@@ -9705,7 +9731,66 @@
               "originalPosition": 5,
               "body": "```suggestion\r\nFor base mode, servers don't need the public key `pkS` produced by KeyGen.\r\n```",
               "createdAt": "2020-10-06T06:43:14Z",
-              "updatedAt": "2020-10-06T06:47:13Z"
+              "updatedAt": "2020-10-08T15:43:48Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTA0OTA1NzI0",
+          "commit": {
+            "abbreviatedOid": "dca4dd1"
+          },
+          "author": "armfazh",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-08T15:28:06Z",
+          "updatedAt": "2020-10-08T15:28:06Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTA0OTE5NDMz",
+          "commit": {
+            "abbreviatedOid": "dca4dd1"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "LGTM pending the suggestions!",
+          "createdAt": "2020-10-08T15:42:29Z",
+          "updatedAt": "2020-10-08T15:43:17Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "```suggestion\r\nFor base mode, servers do not need the public key `pkS` produced by KeyGen.\r\n```",
+              "createdAt": "2020-10-08T15:42:30Z",
+              "updatedAt": "2020-10-08T15:43:48Z"
+            },
+            {
+              "originalPosition": 73,
+              "body": "```suggestion\r\nA ciphersuite (also referred as 'suite' in this document) for the protocol\r\n```",
+              "createdAt": "2020-10-08T15:42:50Z",
+              "updatedAt": "2020-10-08T15:43:48Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTA0OTIwNTY0",
+          "commit": {
+            "abbreviatedOid": "cc02f71"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-08T15:43:43Z",
+          "updatedAt": "2020-10-08T15:43:43Z",
+          "comments": [
+            {
+              "originalPosition": 73,
+              "body": "```suggestion\r\nA ciphersuite (also referred to as 'suite' in this document) for the protocol\r\n```",
+              "createdAt": "2020-10-08T15:43:43Z",
+              "updatedAt": "2020-10-08T15:43:48Z"
             }
           ]
         }
