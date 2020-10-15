@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-13T00:29:39.811273+00:00",
+  "timestamp": "2020-10-15T00:30:15.127955+00:00",
   "repo": "cfrg/draft-irtf-cfrg-voprf",
   "labels": [
     {
@@ -9808,18 +9808,26 @@
       "labels": [],
       "body": "",
       "createdAt": "2020-10-12T22:43:27Z",
-      "updatedAt": "2020-10-12T22:43:27Z",
+      "updatedAt": "2020-10-13T18:18:17Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-voprf",
       "baseRefName": "master",
       "baseRefOid": "be81e97a16dac7fa0a6b93bda85e8c5d4a934740",
       "headRepository": "claucece/draft-irtf-cfrg-voprf",
       "headRefName": "master",
-      "headRefOid": "a25ab45c072d4fd78d8509bbf76a0ec41a4a6ec6",
+      "headRefOid": "c060030ccc2c59a59aa89e6439e8da6f9cdd9f98",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "cc. @chris-wood and @armfazh . ",
+          "createdAt": "2020-10-13T11:25:17Z",
+          "updatedAt": "2020-10-13T11:25:17Z"
+        }
+      ],
       "reviews": []
     }
   ]
