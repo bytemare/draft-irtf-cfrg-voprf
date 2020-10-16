@@ -88,24 +88,24 @@ Table of Contents
      3.4.  Context APIs  . . . . . . . . . . . . . . . . . . . . . .  11
        3.4.1.  Server Context  . . . . . . . . . . . . . . . . . . .  11
        3.4.2.  VerifiableServerContext . . . . . . . . . . . . . . .  12
-       3.4.3.  Client Context  . . . . . . . . . . . . . . . . . . .  16
-       3.4.4.  VerifiableClientContext . . . . . . . . . . . . . . .  18
-   4.  Ciphersuites  . . . . . . . . . . . . . . . . . . . . . . . .  20
-     4.1.  OPRF(curve25519, SHA-512) . . . . . . . . . . . . . . . .  21
-     4.2.  OPRF(curve448, SHA-512) . . . . . . . . . . . . . . . . .  22
-     4.3.  OPRF(P-256, SHA-512)  . . . . . . . . . . . . . . . . . .  22
-     4.4.  OPRF(P-384, SHA-512)  . . . . . . . . . . . . . . . . . .  23
-     4.5.  OPRF(P-521, SHA-512)  . . . . . . . . . . . . . . . . . .  24
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  25
-     5.1.  Security properties . . . . . . . . . . . . . . . . . . .  25
-     5.2.  Cryptographic security  . . . . . . . . . . . . . . . . .  26
-       5.2.1.  Computational hardness assumptions  . . . . . . . . .  26
-       5.2.2.  Protocol security . . . . . . . . . . . . . . . . . .  27
-       5.2.3.  Q-strong-DH oracle  . . . . . . . . . . . . . . . . .  27
-       5.2.4.  Implications for ciphersuite choices  . . . . . . . .  28
-     5.3.  Hashing to curve  . . . . . . . . . . . . . . . . . . . .  29
-     5.4.  Timing Leaks  . . . . . . . . . . . . . . . . . . . . . .  29
-     5.5.  Key rotation  . . . . . . . . . . . . . . . . . . . . . .  29
+       3.4.3.  Client Context  . . . . . . . . . . . . . . . . . . .  15
+       3.4.4.  VerifiableClientContext . . . . . . . . . . . . . . .  17
+   4.  Ciphersuites  . . . . . . . . . . . . . . . . . . . . . . . .  19
+     4.1.  OPRF(curve25519, SHA-512) . . . . . . . . . . . . . . . .  20
+     4.2.  OPRF(curve448, SHA-512) . . . . . . . . . . . . . . . . .  21
+     4.3.  OPRF(P-256, SHA-512)  . . . . . . . . . . . . . . . . . .  21
+     4.4.  OPRF(P-384, SHA-512)  . . . . . . . . . . . . . . . . . .  22
+     4.5.  OPRF(P-521, SHA-512)  . . . . . . . . . . . . . . . . . .  23
+   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  24
+     5.1.  Security properties . . . . . . . . . . . . . . . . . . .  24
+     5.2.  Cryptographic security  . . . . . . . . . . . . . . . . .  25
+       5.2.1.  Computational hardness assumptions  . . . . . . . . .  25
+       5.2.2.  Protocol security . . . . . . . . . . . . . . . . . .  26
+       5.2.3.  Q-strong-DH oracle  . . . . . . . . . . . . . . . . .  26
+       5.2.4.  Implications for ciphersuite choices  . . . . . . . .  27
+     5.3.  Hashing to curve  . . . . . . . . . . . . . . . . . . . .  28
+     5.4.  Timing Leaks  . . . . . . . . . . . . . . . . . . . . . .  28
+     5.5.  Key rotation  . . . . . . . . . . . . . . . . . . . . . .  28
 
 
 
@@ -114,17 +114,17 @@ Davidson, et al.          Expires 19 April 2021                 [Page 2]
 Internet-Draft                    OPRFs                     October 2020
 
 
-   6.  Additive blinding . . . . . . . . . . . . . . . . . . . . . .  29
-     6.1.  Preprocess  . . . . . . . . . . . . . . . . . . . . . . .  30
-     6.2.  Blind . . . . . . . . . . . . . . . . . . . . . . . . . .  31
-     6.3.  Unblind . . . . . . . . . . . . . . . . . . . . . . . . .  31
-       6.3.1.  Parameter Commitments . . . . . . . . . . . . . . . .  32
-   7.  Contributors  . . . . . . . . . . . . . . . . . . . . . . . .  32
-   8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  33
-   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  33
-     9.1.  Normative References  . . . . . . . . . . . . . . . . . .  33
-     9.2.  Informative References  . . . . . . . . . . . . . . . . .  35
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  35
+   6.  Additive blinding . . . . . . . . . . . . . . . . . . . . . .  28
+     6.1.  Preprocess  . . . . . . . . . . . . . . . . . . . . . . .  29
+     6.2.  Blind . . . . . . . . . . . . . . . . . . . . . . . . . .  30
+     6.3.  Unblind . . . . . . . . . . . . . . . . . . . . . . . . .  30
+       6.3.1.  Parameter Commitments . . . . . . . . . . . . . . . .  31
+   7.  Contributors  . . . . . . . . . . . . . . . . . . . . . . . .  31
+   8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  32
+   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  32
+     9.1.  Normative References  . . . . . . . . . . . . . . . . . .  32
+     9.2.  Informative References  . . . . . . . . . . . . . . . . .  34
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  34
 
 1.  Introduction
 
@@ -144,8 +144,8 @@ Internet-Draft                    OPRFs                     October 2020
    The usage of OPRFs has been demonstrated in constructing a number of
    applications: password-protected secret sharing schemes [JKKX16];
    privacy-preserving password stores [SJKS17]; and password-
-   authenticated key exchange or PAKE [OPAQUE].  A VOPRF is necessary in
-   some applications, e.g., the Privacy Pass protocol
+   authenticated key exchange or PAKE [OPAQUE].  The usage of a VOPRF is
+   necessary in some applications, e.g., the Privacy Pass protocol
    [draft-davidson-pp-protocol], wherein this VOPRF is used to generate
    one-time authentication tokens to bypass CAPTCHA challenges.  VOPRFs
    have also been used for password-protected secret sharing schemes
@@ -256,10 +256,8 @@ Internet-Draft                    OPRFs                     October 2020
 1.3.  Requirements
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in [RFC2119].
 
 2.  Preliminaries
 
@@ -273,7 +271,9 @@ Internet-Draft                    OPRFs                     October 2020
    implementing this document, we take "GF(p)" to be equal to the set of
    integers defined by "{0, 1, ..., p-1}".
 
-
+   The fundamental group operation is addition "+" with identity element
+   "I".  For any elements "A" and "B" of the group "GG", "A + B = B + A"
+   is also a member of "GG".  Also, for any "A" in "GG", there exists an
 
 
 
@@ -282,9 +282,6 @@ Davidson, et al.          Expires 19 April 2021                 [Page 5]
 Internet-Draft                    OPRFs                     October 2020
 
 
-   The fundamental group operation is addition "+" with identity element
-   "I".  For any elements "A" and "B" of the group "GG", "A + B = B + A"
-   is also a member of "GG".  Also, for any "A" in "GG", there exists an
    element "-A" such that "A + (-A) = (-A) + A = I".  Scalar
    multiplication is equivalent to the repeated application of the group
    operation on an element A with itself "r-1" times, this is denoted as
@@ -330,6 +327,9 @@ Internet-Draft                    OPRFs                     October 2020
    [RFC7748], which require accounting for cofactors) there are some
    implementation issues that introduce inherent discrepancies between
    standard prime-order groups and the elliptic curve instantiation.  In
+   this document, all algorithms that we detail assume that the group is
+   a prime-order group, and this MUST be upheld by any implementer.
+   That is, any curve instantiation should be written such that any
 
 
 
@@ -338,9 +338,6 @@ Davidson, et al.          Expires 19 April 2021                 [Page 6]
 Internet-Draft                    OPRFs                     October 2020
 
 
-   this document, all algorithms that we detail assume that the group is
-   a prime-order group, and this MUST be upheld by any implementer.
-   That is, any curve instantiation should be written such that any
    discrepancies with a prime-order group instantiation are removed.
    See Section 4 for advice corresponding to implementation of this
    interface for specific definitions of elliptic curves.
@@ -379,21 +376,6 @@ Internet-Draft                    OPRFs                     October 2020
    and the server learns nothing.  In the verifiable mode, the client
    also gets proof that the server used skS in computing the function.
 
-
-
-
-
-
-
-
-
-
-
-Davidson, et al.          Expires 19 April 2021                 [Page 7]
-
-Internet-Draft                    OPRFs                     October 2020
-
-
    To achieve verifiability, as in the original work of [JKK14], we
    provide a zero-knowledge proof that the key provided as input by the
    server in the "Evaluate" function is the same key as it used to
@@ -404,6 +386,13 @@ Internet-Draft                    OPRFs                     October 2020
    reveal the server's long-term private key to the client.
 
    The following one-byte values distinguish between these two modes:
+
+
+
+Davidson, et al.          Expires 19 April 2021                 [Page 7]
+
+Internet-Draft                    OPRFs                     October 2020
+
 
                         +================+=======+
                         | Mode           | Value |
@@ -443,13 +432,6 @@ Internet-Draft                    OPRFs                     October 2020
    required).  In "Finalize", the client outputs a byte array
    corresponding to its input.
 
-
-
-Davidson, et al.          Expires 19 April 2021                 [Page 8]
-
-Internet-Draft                    OPRFs                     October 2020
-
-
    Note that in the final output, the client computes Finalize over some
    auxiliary input data "info".  This parameter SHOULD be used for
    domain separation in the (V)OPRF protocol.  Specifically, any system
@@ -457,6 +439,16 @@ Internet-Draft                    OPRFs                     October 2020
    values to to ensure finalized outputs are separate.  Guidance for
    constructing info can be found in [I-D.irtf-cfrg-hash-to-curve];
    Section 3.1.
+
+
+
+
+
+
+Davidson, et al.          Expires 19 April 2021                 [Page 8]
+
+Internet-Draft                    OPRFs                     October 2020
+
 
 3.2.  Context Setup
 
@@ -498,6 +490,14 @@ Internet-Draft                    OPRFs                     October 2020
    "pkS" accessible for clients.  (Indeed, it is a required parameter
    when configuring a verifiable client context.)
 
+   Each setup function takes a ciphersuite from the list defined in
+   Section 4.  Each ciphersuite has two-byte identifier, referred to as
+   "suite.ID" in the pseudocode above, that identifies the suite.
+   Section 4 lists these ciphersuite identifiers.
+
+
+
+
 
 
 
@@ -505,11 +505,6 @@ Davidson, et al.          Expires 19 April 2021                 [Page 9]
 
 Internet-Draft                    OPRFs                     October 2020
 
-
-   Each setup function takes a ciphersuite from the list defined in
-   Section 4.  Each ciphersuite has two-byte identifier, referred to as
-   "suite.ID" in the pseudocode above, that identifies the suite.
-   Section 4 lists these ciphersuite identifiers.
 
 3.3.  Data Structures
 
@@ -552,6 +547,11 @@ Internet-Draft                    OPRFs                     October 2020
    "SerializedElement" values and proof.  These evaluation types are
    only useful in verifiable contexts which carry proofs.
 
+   struct {
+     SerializedElement elements<1..2^16-1>;
+     Scalar proof<0...2^16-1>; /* only for modeVerifiable */
+   } BatchedEvaluation;
+
 
 
 
@@ -561,11 +561,6 @@ Davidson, et al.          Expires 19 April 2021                [Page 10]
 
 Internet-Draft                    OPRFs                     October 2020
 
-
-   struct {
-     SerializedElement elements<1..2^16-1>;
-     Scalar proof<0...2^16-1>; /* only for modeVerifiable */
-   } BatchedEvaluation;
 
 3.4.  Context APIs
 
@@ -613,6 +608,11 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
+
+
+
+
+
 Davidson, et al.          Expires 19 April 2021                [Page 11]
 
 Internet-Draft                    OPRFs                     October 2020
@@ -635,7 +635,7 @@ Internet-Draft                    OPRFs                     October 2020
      issuedElement = Evaluate(skS, [element])
      E = GG.Serialize(issuedElement)
 
-     finalizeDST = "VOPRF05-Finalize-" || client.contextString
+     finalizeDST = "RFCXXXX-Finalize-" || client.contextString
      hashInput = len(input) || input ||
                  len(E) || E ||
                  len(info) || info ||
@@ -643,9 +643,6 @@ Internet-Draft                    OPRFs                     October 2020
      digest = Hash(hashInput)
 
      return CT_EQUAL(digest, output)
-
-   [[RFC editor: please change "VOPRF05" to "RFCXXXX", where XXXX is the
-   final number, here and elsewhere before publication.]]
 
 3.4.2.  VerifiableServerContext
 
@@ -655,6 +652,9 @@ Internet-Draft                    OPRFs                     October 2020
    functions "GenerateProof" and "ComputeComposites", described below.
 
 3.4.2.1.  Evaluate
+
+
+
 
 
 
@@ -743,21 +743,19 @@ Internet-Draft                    OPRFs                     October 2020
 
    def GenerateProof(skS, pkS, blindToken, element)
      G = GG.Generator()
-     gen = GG.Serialize(G)
 
      blindTokenList = [blindToken]
      elementList = [element]
 
-     (a1, a2) = ComputeComposites(gen, pkS, blindTokenList, elementList)
+     (a1, a2) = ComputeComposites(pkS, blindTokenList, elementList)
 
      M = GG.Deserialize(a1)
      r = GG.RandomScalar()
      a3 = GG.Serialize(r * G)
      a4 = GG.Serialize(r * M)
 
-     challengeDST = "VOPRF05-challenge-" || self.contextString
-     h2Input = I2OSP(len(gen), 2) || gen ||
-               I2OSP(len(pkS), 2) || pkS ||
+     challengeDST = "RFCXXXX-challenge-" || self.contextString
+     h2Input = I2OSP(len(pkS), 2) || pkS ||
                I2OSP(len(a1), 2) || a1 || I2OSP(len(a2), 2) || a2 ||
                I2OSP(len(a3), 2) || a3 || I2OSP(len(a4), 2) || a4 ||
                I2OSP(len(challengeDST), 2) || challengeDST
@@ -766,25 +764,6 @@ Internet-Draft                    OPRFs                     October 2020
      s = (r - c * skS) mod p
 
      return (c, s)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Davidson, et al.          Expires 19 April 2021                [Page 14]
-
-Internet-Draft                    OPRFs                     October 2020
-
 
 3.4.2.2.1.  Batching inputs
 
@@ -799,6 +778,14 @@ Internet-Draft                    OPRFs                     October 2020
    "GenerateProof" variant would permit lists of inputs, and no list
    translation would be needed.)
 
+
+
+
+Davidson, et al.          Expires 19 April 2021                [Page 14]
+
+Internet-Draft                    OPRFs                     October 2020
+
+
    Note that using batched inputs creates a "BatchedEvaluation" object
    as the output of "Evaluate".
 
@@ -811,40 +798,8 @@ Internet-Draft                    OPRFs                     October 2020
 
 3.4.2.3.  ComputeComposites
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Davidson, et al.          Expires 19 April 2021                [Page 15]
-
-Internet-Draft                    OPRFs                     October 2020
-
-
    Input:
 
-     SerializedElement gen
      PublicKey pkS
      SerializedElement blindTokens[m]
      SerializedElement elements[m]
@@ -853,11 +808,10 @@ Internet-Draft                    OPRFs                     October 2020
 
      SerializedElement composites[2]
 
-   def ComputeComposites(gen, pkS, blindTokens, elements):
-     seedDST = "VOPRF05-seed-" || self.contextString
-     compositeDST = "VOPRF05-composite-" || self.contextString
-     h1Input = I2OSP(len(gen), 2) || gen ||
-               I2OSP(len(pkS), 2) || pkS ||
+   def ComputeComposites(pkS, blindTokens, elements):
+     seedDST = "RFCXXXX-seed-" || self.contextString
+     compositeDST = "RFCXXXX-composite-" || self.contextString
+     h1Input = I2OSP(len(pkS), 2) || pkS ||
                I2OSP(len(blindTokens), 2) || blindTokens ||
                I2OSP(len(elements), 2) || elements ||
                I2OSP(len(seedDST), 2) || seedDST
@@ -881,22 +835,18 @@ Internet-Draft                    OPRFs                     October 2020
    setup.  It has three functions, "Blind()", "Unblind()", and
    "Finalize()", as described below.
 
+
+
+Davidson, et al.          Expires 19 April 2021                [Page 15]
+
+Internet-Draft                    OPRFs                     October 2020
+
+
 3.4.3.1.  Blind
 
    We note here that the blinding mechanism that we use can be modified
    slightly with the opportunity for making performance gains in some
    scenarios.  We detail these modifications in Section 6.
-
-
-
-
-
-
-
-Davidson, et al.          Expires 19 April 2021                [Page 16]
-
-Internet-Draft                    OPRFs                     October 2020
-
 
    Input:
 
@@ -943,13 +893,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-
-
-
-
-
-
-Davidson, et al.          Expires 19 April 2021                [Page 17]
+Davidson, et al.          Expires 19 April 2021                [Page 16]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -965,7 +909,7 @@ Internet-Draft                    OPRFs                     October 2020
      opaque output<1..2^16-1>
 
    def Finalize(token, issuedToken, info):
-     finalizeDST = "VOPRF05-Finalize-" || self.contextString
+     finalizeDST = "RFCXXXX-Finalize-" || self.contextString
      hashInput = len(token.data) || token.data ||
                  len(issuedToken) || issuedToken ||
                  len(info) || info ||
@@ -1005,7 +949,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 19 April 2021                [Page 18]
+Davidson, et al.          Expires 19 April 2021                [Page 17]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1022,21 +966,19 @@ Internet-Draft                    OPRFs                     October 2020
 
    def VerifyProof(pkS, blindToken, Ev):
      G = GG.Generator()
-     gen = GG.Serialize(G)
 
      blindTokenList = [blindToken]
      elementList = [Ev.element]
 
-     (a1, a2) = ComputeComposites(gen, pkS, blindTokenList, elementList)
+     (a1, a2) = ComputeComposites(pkS, blindTokenList, elementList)
 
      A' = (Ev.proof[1] * G + Ev.proof[0] * pkS)
      B' = (Ev.proof[1] * M + Ev.proof[0] * Z)
      a3 = GG.Serialize(A')
      a4 = GG.Serialize(B')
 
-     challengeDST = "VOPRF05-challenge-" || self.contextString
-     h2Input = I2OSP(len(gen), 2) || gen ||
-               I2OSP(len(pkS), 2) || pkS ||
+     challengeDST = "RFCXXXX-challenge-" || self.contextString
+     h2Input = I2OSP(len(pkS), 2) || pkS ||
                I2OSP(len(a1), 2) || a1 ||
                I2OSP(len(a2), 2) || a2 ||
                I2OSP(len(a3), 2) || a3 ||
@@ -1061,7 +1003,9 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 19 April 2021                [Page 19]
+
+
+Davidson, et al.          Expires 19 April 2021                [Page 18]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1117,7 +1061,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 19 April 2021                [Page 20]
+Davidson, et al.          Expires 19 April 2021                [Page 19]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1146,7 +1090,7 @@ Internet-Draft                    OPRFs                     October 2020
          CD65812631A5CF5D3ED"
 
       -  HashToGroup(): curve25519_XMD:SHA-512_ELL2_RO_
-         [I-D.irtf-cfrg-hash-to-curve] with DST "VOPRF05-
+         [I-D.irtf-cfrg-hash-to-curve] with DST "RFCXXXX-
          curve25519_XMD:SHA-512_ELL2_RO_"
 
       -  HashToScalar(): Use hash_to_field from
@@ -1173,7 +1117,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 19 April 2021                [Page 21]
+Davidson, et al.          Expires 19 April 2021                [Page 20]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1197,7 +1141,7 @@ Internet-Draft                    OPRFs                     October 2020
          44F3"
 
       -  HashToGroup(): curve448_XMD:SHA-512_ELL2_RO_
-         [I-D.irtf-cfrg-hash-to-curve] with DST "VOPRF05-
+         [I-D.irtf-cfrg-hash-to-curve] with DST "RFCXXXX-
          curve448_XMD:SHA-512_ELL2_RO_"
 
       -  HashToScalar(): Use hash_to_field from
@@ -1229,7 +1173,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 19 April 2021                [Page 22]
+Davidson, et al.          Expires 19 April 2021                [Page 21]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1247,7 +1191,7 @@ Internet-Draft                    OPRFs                     October 2020
          E84F3B9CAC2FC632551"
 
       -  HashToGroup(): P256_XMD:SHA-256_SSWU_RO_
-         [I-D.irtf-cfrg-hash-to-curve] with DST "VOPRF05-P256_XMD:SHA-
+         [I-D.irtf-cfrg-hash-to-curve] with DST "RFCXXXX-P256_XMD:SHA-
          256_SSWU_RO_"
 
       -  HashToScalar(): Use hash_to_field from
@@ -1285,7 +1229,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 19 April 2021                [Page 23]
+Davidson, et al.          Expires 19 April 2021                [Page 22]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1294,7 +1238,7 @@ Internet-Draft                    OPRFs                     October 2020
          FFFC7634D81F4372DDF581A0DB248B0A77AECEC196ACCC52973"
 
       -  HashToGroup(): P384_XMD:SHA-512_SSWU_RO_
-         [I-D.irtf-cfrg-hash-to-curve] with DST "VOPRF05-P384_XMD:SHA-
+         [I-D.irtf-cfrg-hash-to-curve] with DST "RFCXXXX-P384_XMD:SHA-
          512_SSWU_RO_"
 
       -  HashToScalar(): Use hash_to_field from
@@ -1336,12 +1280,12 @@ Internet-Draft                    OPRFs                     October 2020
          99C47AEBB6FB71E91386409"
 
       -  HashToGroup(): P521_XMD:SHA-512_SSWU_RO_
-         [I-D.irtf-cfrg-hash-to-curve] with DST "VOPRF05-P521_XMD:SHA-
+         [I-D.irtf-cfrg-hash-to-curve] with DST "RFCXXXX-P521_XMD:SHA-
          512_SSWU_RO_"
 
 
 
-Davidson, et al.          Expires 19 April 2021                [Page 24]
+Davidson, et al.          Expires 19 April 2021                [Page 23]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1397,7 +1341,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 19 April 2021                [Page 25]
+Davidson, et al.          Expires 19 April 2021                [Page 24]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1453,7 +1397,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 19 April 2021                [Page 26]
+Davidson, et al.          Expires 19 April 2021                [Page 25]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1509,7 +1453,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 19 April 2021                [Page 27]
+Davidson, et al.          Expires 19 April 2021                [Page 26]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1565,7 +1509,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 19 April 2021                [Page 28]
+Davidson, et al.          Expires 19 April 2021                [Page 27]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1621,7 +1565,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 19 April 2021                [Page 29]
+Davidson, et al.          Expires 19 April 2021                [Page 28]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1677,7 +1621,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 19 April 2021                [Page 30]
+Davidson, et al.          Expires 19 April 2021                [Page 29]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1733,7 +1677,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 19 April 2021                [Page 31]
+Davidson, et al.          Expires 19 April 2021                [Page 30]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1789,7 +1733,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 19 April 2021                [Page 32]
+Davidson, et al.          Expires 19 April 2021                [Page 31]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1845,7 +1789,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 19 April 2021                [Page 33]
+Davidson, et al.          Expires 19 April 2021                [Page 32]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1901,7 +1845,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 19 April 2021                [Page 34]
+Davidson, et al.          Expires 19 April 2021                [Page 33]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1914,10 +1858,6 @@ Internet-Draft                    OPRFs                     October 2020
               "PKCS #1: RSA Cryptography Specifications Version 2.2",
               RFC 8017, DOI 10.17487/RFC8017, November 2016,
               <https://www.rfc-editor.org/info/rfc8017>.
-
-   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
-              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
-              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
    [RISTRETTO]
               "The ristretto255 Group", <https://tools.ietf.org/html/
@@ -1954,18 +1894,16 @@ Authors' Addresses
    Alex Davidson
    Cloudflare
    County Hall
-
-
-
-Davidson, et al.          Expires 19 April 2021                [Page 35]
-
-Internet-Draft                    OPRFs                     October 2020
-
-
    London, SE1 7GP
    United Kingdom
 
    Email: alex.davidson92@gmail.com
+
+
+
+Davidson, et al.          Expires 19 April 2021                [Page 34]
+
+Internet-Draft                    OPRFs                     October 2020
 
 
    Armando Faz-Hernandez
@@ -2013,4 +1951,10 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 19 April 2021                [Page 36]
+
+
+
+
+
+
+Davidson, et al.          Expires 19 April 2021                [Page 35]
