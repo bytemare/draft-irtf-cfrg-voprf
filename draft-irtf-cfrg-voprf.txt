@@ -144,8 +144,8 @@ Internet-Draft                    OPRFs                     October 2020
    The usage of OPRFs has been demonstrated in constructing a number of
    applications: password-protected secret sharing schemes [JKKX16];
    privacy-preserving password stores [SJKS17]; and password-
-   authenticated key exchange or PAKE [OPAQUE].  The usage of a VOPRF is
-   necessary in some applications, e.g., the Privacy Pass protocol
+   authenticated key exchange or PAKE [OPAQUE].  A VOPRF is necessary in
+   some applications, e.g., the Privacy Pass protocol
    [draft-davidson-pp-protocol], wherein this VOPRF is used to generate
    one-time authentication tokens to bypass CAPTCHA challenges.  VOPRFs
    have also been used for password-protected secret sharing schemes
@@ -256,8 +256,10 @@ Internet-Draft                    OPRFs                     October 2020
 1.3.  Requirements
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-   document are to be interpreted as described in [RFC2119].
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
 
 2.  Preliminaries
 
@@ -271,9 +273,7 @@ Internet-Draft                    OPRFs                     October 2020
    implementing this document, we take "GF(p)" to be equal to the set of
    integers defined by "{0, 1, ..., p-1}".
 
-   The fundamental group operation is addition "+" with identity element
-   "I".  For any elements "A" and "B" of the group "GG", "A + B = B + A"
-   is also a member of "GG".  Also, for any "A" in "GG", there exists an
+
 
 
 
@@ -282,6 +282,9 @@ Davidson, et al.          Expires 19 April 2021                 [Page 5]
 Internet-Draft                    OPRFs                     October 2020
 
 
+   The fundamental group operation is addition "+" with identity element
+   "I".  For any elements "A" and "B" of the group "GG", "A + B = B + A"
+   is also a member of "GG".  Also, for any "A" in "GG", there exists an
    element "-A" such that "A + (-A) = (-A) + A = I".  Scalar
    multiplication is equivalent to the repeated application of the group
    operation on an element A with itself "r-1" times, this is denoted as
@@ -327,9 +330,6 @@ Internet-Draft                    OPRFs                     October 2020
    [RFC7748], which require accounting for cofactors) there are some
    implementation issues that introduce inherent discrepancies between
    standard prime-order groups and the elliptic curve instantiation.  In
-   this document, all algorithms that we detail assume that the group is
-   a prime-order group, and this MUST be upheld by any implementer.
-   That is, any curve instantiation should be written such that any
 
 
 
@@ -338,6 +338,9 @@ Davidson, et al.          Expires 19 April 2021                 [Page 6]
 Internet-Draft                    OPRFs                     October 2020
 
 
+   this document, all algorithms that we detail assume that the group is
+   a prime-order group, and this MUST be upheld by any implementer.
+   That is, any curve instantiation should be written such that any
    discrepancies with a prime-order group instantiation are removed.
    See Section 4 for advice corresponding to implementation of this
    interface for specific definitions of elliptic curves.
@@ -352,6 +355,8 @@ Internet-Draft                    OPRFs                     October 2020
 
    *  For two byte arrays "x" and "y", write "x || y" to denote their
       concatenation.
+
+   *  We assume that all numbers are stored in big-endian orientation.
 
    *  I2OSP and OS2IP: Convert a byte array to and from a non-negative
       integer as described in [RFC8017].  Note that these functions
@@ -374,6 +379,21 @@ Internet-Draft                    OPRFs                     October 2020
    and the server learns nothing.  In the verifiable mode, the client
    also gets proof that the server used skS in computing the function.
 
+
+
+
+
+
+
+
+
+
+
+Davidson, et al.          Expires 19 April 2021                 [Page 7]
+
+Internet-Draft                    OPRFs                     October 2020
+
+
    To achieve verifiability, as in the original work of [JKK14], we
    provide a zero-knowledge proof that the key provided as input by the
    server in the "Evaluate" function is the same key as it used to
@@ -384,15 +404,6 @@ Internet-Draft                    OPRFs                     October 2020
    reveal the server's long-term private key to the client.
 
    The following one-byte values distinguish between these two modes:
-
-
-
-
-
-Davidson, et al.          Expires 19 April 2021                 [Page 7]
-
-Internet-Draft                    OPRFs                     October 2020
-
 
                         +================+=======+
                         | Mode           | Value |
@@ -432,6 +443,13 @@ Internet-Draft                    OPRFs                     October 2020
    required).  In "Finalize", the client outputs a byte array
    corresponding to its input.
 
+
+
+Davidson, et al.          Expires 19 April 2021                 [Page 8]
+
+Internet-Draft                    OPRFs                     October 2020
+
+
    Note that in the final output, the client computes Finalize over some
    auxiliary input data "info".  This parameter SHOULD be used for
    domain separation in the (V)OPRF protocol.  Specifically, any system
@@ -439,16 +457,6 @@ Internet-Draft                    OPRFs                     October 2020
    values to to ensure finalized outputs are separate.  Guidance for
    constructing info can be found in [I-D.irtf-cfrg-hash-to-curve];
    Section 3.1.
-
-
-
-
-
-
-Davidson, et al.          Expires 19 April 2021                 [Page 8]
-
-Internet-Draft                    OPRFs                     October 2020
-
 
 3.2.  Context Setup
 
@@ -490,14 +498,6 @@ Internet-Draft                    OPRFs                     October 2020
    "pkS" accessible for clients.  (Indeed, it is a required parameter
    when configuring a verifiable client context.)
 
-   Each setup function takes a ciphersuite from the list defined in
-   Section 4.  Each ciphersuite has two-byte identifier, referred to as
-   "suite.ID" in the pseudocode above, that identifies the suite.
-   Section 4 lists these ciphersuite identifiers.
-
-
-
-
 
 
 
@@ -505,6 +505,11 @@ Davidson, et al.          Expires 19 April 2021                 [Page 9]
 
 Internet-Draft                    OPRFs                     October 2020
 
+
+   Each setup function takes a ciphersuite from the list defined in
+   Section 4.  Each ciphersuite has two-byte identifier, referred to as
+   "suite.ID" in the pseudocode above, that identifies the suite.
+   Section 4 lists these ciphersuite identifiers.
 
 3.3.  Data Structures
 
@@ -547,11 +552,6 @@ Internet-Draft                    OPRFs                     October 2020
    "SerializedElement" values and proof.  These evaluation types are
    only useful in verifiable contexts which carry proofs.
 
-   struct {
-     SerializedElement elements<1..2^16-1>;
-     Scalar proof<0...2^16-1>; /* only for modeVerifiable */
-   } BatchedEvaluation;
-
 
 
 
@@ -561,6 +561,11 @@ Davidson, et al.          Expires 19 April 2021                [Page 10]
 
 Internet-Draft                    OPRFs                     October 2020
 
+
+   struct {
+     SerializedElement elements<1..2^16-1>;
+     Scalar proof<0...2^16-1>; /* only for modeVerifiable */
+   } BatchedEvaluation;
 
 3.4.  Context APIs
 
@@ -608,11 +613,6 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-
-
-
-
-
 Davidson, et al.          Expires 19 April 2021                [Page 11]
 
 Internet-Draft                    OPRFs                     October 2020
@@ -635,7 +635,7 @@ Internet-Draft                    OPRFs                     October 2020
      issuedElement = Evaluate(skS, [element])
      E = GG.Serialize(issuedElement)
 
-     finalizeDST = "RFCXXXX-Finalize-" || client.contextString
+     finalizeDST = "VOPRF05-Finalize-" || client.contextString
      hashInput = len(input) || input ||
                  len(E) || E ||
                  len(info) || info ||
@@ -643,6 +643,9 @@ Internet-Draft                    OPRFs                     October 2020
      digest = Hash(hashInput)
 
      return CT_EQUAL(digest, output)
+
+   [[RFC editor: please change "VOPRF05" to "RFCXXXX", where XXXX is the
+   final number, here and elsewhere before publication.]]
 
 3.4.2.  VerifiableServerContext
 
@@ -652,9 +655,6 @@ Internet-Draft                    OPRFs                     October 2020
    functions "GenerateProof" and "ComputeComposites", described below.
 
 3.4.2.1.  Evaluate
-
-
-
 
 
 
@@ -755,7 +755,7 @@ Internet-Draft                    OPRFs                     October 2020
      a3 = GG.Serialize(r * G)
      a4 = GG.Serialize(r * M)
 
-     challengeDST = "RFCXXXX-challenge-" || self.contextString
+     challengeDST = "VOPRF05-challenge-" || self.contextString
      h2Input = I2OSP(len(gen), 2) || gen ||
                I2OSP(len(pkS), 2) || pkS ||
                I2OSP(len(a1), 2) || a1 || I2OSP(len(a2), 2) || a2 ||
@@ -854,8 +854,8 @@ Internet-Draft                    OPRFs                     October 2020
      SerializedElement composites[2]
 
    def ComputeComposites(gen, pkS, blindTokens, elements):
-     seedDST = "RFCXXXX-seed-" || self.contextString
-     compositeDST = "RFCXXXX-composite-" || self.contextString
+     seedDST = "VOPRF05-seed-" || self.contextString
+     compositeDST = "VOPRF05-composite-" || self.contextString
      h1Input = I2OSP(len(gen), 2) || gen ||
                I2OSP(len(pkS), 2) || pkS ||
                I2OSP(len(blindTokens), 2) || blindTokens ||
@@ -965,7 +965,7 @@ Internet-Draft                    OPRFs                     October 2020
      opaque output<1..2^16-1>
 
    def Finalize(token, issuedToken, info):
-     finalizeDST = "RFCXXXX-Finalize-" || self.contextString
+     finalizeDST = "VOPRF05-Finalize-" || self.contextString
      hashInput = len(token.data) || token.data ||
                  len(issuedToken) || issuedToken ||
                  len(info) || info ||
@@ -1034,7 +1034,7 @@ Internet-Draft                    OPRFs                     October 2020
      a3 = GG.Serialize(A')
      a4 = GG.Serialize(B')
 
-     challengeDST = "RFCXXXX-challenge-" || self.contextString
+     challengeDST = "VOPRF05-challenge-" || self.contextString
      h2Input = I2OSP(len(gen), 2) || gen ||
                I2OSP(len(pkS), 2) || pkS ||
                I2OSP(len(a1), 2) || a1 ||
@@ -1146,7 +1146,7 @@ Internet-Draft                    OPRFs                     October 2020
          CD65812631A5CF5D3ED"
 
       -  HashToGroup(): curve25519_XMD:SHA-512_ELL2_RO_
-         [I-D.irtf-cfrg-hash-to-curve] with DST "RFCXXXX-
+         [I-D.irtf-cfrg-hash-to-curve] with DST "VOPRF05-
          curve25519_XMD:SHA-512_ELL2_RO_"
 
       -  HashToScalar(): Use hash_to_field from
@@ -1197,7 +1197,7 @@ Internet-Draft                    OPRFs                     October 2020
          44F3"
 
       -  HashToGroup(): curve448_XMD:SHA-512_ELL2_RO_
-         [I-D.irtf-cfrg-hash-to-curve] with DST "RFCXXXX-
+         [I-D.irtf-cfrg-hash-to-curve] with DST "VOPRF05-
          curve448_XMD:SHA-512_ELL2_RO_"
 
       -  HashToScalar(): Use hash_to_field from
@@ -1247,7 +1247,7 @@ Internet-Draft                    OPRFs                     October 2020
          E84F3B9CAC2FC632551"
 
       -  HashToGroup(): P256_XMD:SHA-256_SSWU_RO_
-         [I-D.irtf-cfrg-hash-to-curve] with DST "RFCXXXX-P256_XMD:SHA-
+         [I-D.irtf-cfrg-hash-to-curve] with DST "VOPRF05-P256_XMD:SHA-
          256_SSWU_RO_"
 
       -  HashToScalar(): Use hash_to_field from
@@ -1294,7 +1294,7 @@ Internet-Draft                    OPRFs                     October 2020
          FFFC7634D81F4372DDF581A0DB248B0A77AECEC196ACCC52973"
 
       -  HashToGroup(): P384_XMD:SHA-512_SSWU_RO_
-         [I-D.irtf-cfrg-hash-to-curve] with DST "RFCXXXX-P384_XMD:SHA-
+         [I-D.irtf-cfrg-hash-to-curve] with DST "VOPRF05-P384_XMD:SHA-
          512_SSWU_RO_"
 
       -  HashToScalar(): Use hash_to_field from
@@ -1336,7 +1336,7 @@ Internet-Draft                    OPRFs                     October 2020
          99C47AEBB6FB71E91386409"
 
       -  HashToGroup(): P521_XMD:SHA-512_SSWU_RO_
-         [I-D.irtf-cfrg-hash-to-curve] with DST "RFCXXXX-P521_XMD:SHA-
+         [I-D.irtf-cfrg-hash-to-curve] with DST "VOPRF05-P521_XMD:SHA-
          512_SSWU_RO_"
 
 
@@ -1915,6 +1915,10 @@ Internet-Draft                    OPRFs                     October 2020
               RFC 8017, DOI 10.17487/RFC8017, November 2016,
               <https://www.rfc-editor.org/info/rfc8017>.
 
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+
    [RISTRETTO]
               "The ristretto255 Group", <https://tools.ietf.org/html/
               draft-hdevalence-cfrg-ristretto-01>.
@@ -1950,16 +1954,18 @@ Authors' Addresses
    Alex Davidson
    Cloudflare
    County Hall
-   London, SE1 7GP
-   United Kingdom
-
-   Email: alex.davidson92@gmail.com
 
 
 
 Davidson, et al.          Expires 19 April 2021                [Page 35]
 
 Internet-Draft                    OPRFs                     October 2020
+
+
+   London, SE1 7GP
+   United Kingdom
+
+   Email: alex.davidson92@gmail.com
 
 
    Armando Faz-Hernandez
@@ -1987,12 +1993,6 @@ Internet-Draft                    OPRFs                     October 2020
    United States of America
 
    Email: caw@heapingbits.net
-
-
-
-
-
-
 
 
 
