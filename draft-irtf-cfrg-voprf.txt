@@ -88,7 +88,7 @@ Table of Contents
      3.4.  Context APIs  . . . . . . . . . . . . . . . . . . . . . .  11
        3.4.1.  Server Context  . . . . . . . . . . . . . . . . . . .  11
        3.4.2.  VerifiableServerContext . . . . . . . . . . . . . . .  12
-       3.4.3.  Client Context  . . . . . . . . . . . . . . . . . . .  15
+       3.4.3.  Client Context  . . . . . . . . . . . . . . . . . . .  16
        3.4.4.  VerifiableClientContext . . . . . . . . . . . . . . .  17
    4.  Ciphersuites  . . . . . . . . . . . . . . . . . . . . . . . .  19
      4.1.  OPRF(curve25519, SHA-512) . . . . . . . . . . . . . . . .  20
@@ -636,10 +636,10 @@ Internet-Draft                    OPRFs                     October 2020
      E = GG.Serialize(issuedElement)
 
      finalizeDST = "RFCXXXX-Finalize-" || client.contextString
-     hashInput = len(input) || input ||
-                 len(E) || E ||
-                 len(info) || info ||
-                 len(finalizeDST) || finalizeDST
+     hashInput = I2OSP(len(input), 2) || input ||
+                 I2OSP(len(E), 2) || E ||
+                 I2OSP(len(info), 2) || info ||
+                 I2OSP(len(finalizeDST), 2) || finalizeDST
      digest = Hash(hashInput)
 
      return CT_EQUAL(digest, output)
@@ -743,11 +743,12 @@ Internet-Draft                    OPRFs                     October 2020
 
    def GenerateProof(skS, pkS, blindToken, element)
      G = GG.Generator()
+     gen = GG.Serialize(G)
 
      blindTokenList = [blindToken]
      elementList = [element]
 
-     (a1, a2) = ComputeComposites(pkS, blindTokenList, elementList)
+     (a1, a2) = ComputeComposites(gen, pkS, blindTokenList, elementList)
 
      M = GG.Deserialize(a1)
      r = GG.RandomScalar()
@@ -755,9 +756,12 @@ Internet-Draft                    OPRFs                     October 2020
      a4 = GG.Serialize(r * M)
 
      challengeDST = "RFCXXXX-challenge-" || self.contextString
-     h2Input = I2OSP(len(pkS), 2) || pkS ||
-               I2OSP(len(a1), 2) || a1 || I2OSP(len(a2), 2) || a2 ||
-               I2OSP(len(a3), 2) || a3 || I2OSP(len(a4), 2) || a4 ||
+     h2Input = I2OSP(len(gen), 2) || gen ||
+               I2OSP(len(pkS), 2) || pkS ||
+               I2OSP(len(a1), 2) || a1 ||
+               I2OSP(len(a2), 2) || a2 ||
+               I2OSP(len(a3), 2) || a3 ||
+               I2OSP(len(a4), 2) || a4 ||
                I2OSP(len(challengeDST), 2) || challengeDST
 
      c = GG.HashToScalar(h2Input)
@@ -774,10 +778,6 @@ Internet-Draft                    OPRFs                     October 2020
    Applications can take advantage of this functionality by invoking
    "GenerateProof" on batches of inputs.  (Notice that in the pseudocode
    above, the single inputs "blindToken" and "element" are translated
-   into lists before invoking "ComputeComposites".  A batched
-   "GenerateProof" variant would permit lists of inputs, and no list
-   translation would be needed.)
-
 
 
 
@@ -785,6 +785,10 @@ Davidson, et al.          Expires 19 April 2021                [Page 14]
 
 Internet-Draft                    OPRFs                     October 2020
 
+
+   into lists before invoking "ComputeComposites".  A batched
+   "GenerateProof" variant would permit lists of inputs, and no list
+   translation would be needed.)
 
    Note that using batched inputs creates a "BatchedEvaluation" object
    as the output of "Evaluate".
@@ -800,6 +804,7 @@ Internet-Draft                    OPRFs                     October 2020
 
    Input:
 
+     SerializedElement gen
      PublicKey pkS
      SerializedElement blindTokens[m]
      SerializedElement elements[m]
@@ -808,10 +813,11 @@ Internet-Draft                    OPRFs                     October 2020
 
      SerializedElement composites[2]
 
-   def ComputeComposites(pkS, blindTokens, elements):
+   def ComputeComposites(gen, pkS, blindTokens, elements):
      seedDST = "RFCXXXX-seed-" || self.contextString
      compositeDST = "RFCXXXX-composite-" || self.contextString
-     h1Input = I2OSP(len(pkS), 2) || pkS ||
+     h1Input = I2OSP(len(gen), 2) || gen ||
+               I2OSP(len(pkS), 2) || pkS ||
                I2OSP(len(blindTokens), 2) || blindTokens ||
                I2OSP(len(elements), 2) || elements ||
                I2OSP(len(seedDST), 2) || seedDST
@@ -829,18 +835,18 @@ Internet-Draft                    OPRFs                     October 2020
        Z = di * Zi + Z
     return [GG.Serialize(M), GG.Serialize(Z)]
 
-3.4.3.  Client Context
-
-   The ClientContext encapsulates the context string constructed during
-   setup.  It has three functions, "Blind()", "Unblind()", and
-   "Finalize()", as described below.
-
 
 
 Davidson, et al.          Expires 19 April 2021                [Page 15]
 
 Internet-Draft                    OPRFs                     October 2020
 
+
+3.4.3.  Client Context
+
+   The ClientContext encapsulates the context string constructed during
+   setup.  It has three functions, "Blind()", "Unblind()", and
+   "Finalize()", as described below.
 
 3.4.3.1.  Blind
 
@@ -868,6 +874,30 @@ Internet-Draft                    OPRFs                     October 2020
 
 3.4.3.2.  Unblind
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Davidson, et al.          Expires 19 April 2021                [Page 16]
+
+Internet-Draft                    OPRFs                     October 2020
+
+
    Input:
 
      Token token
@@ -888,16 +918,6 @@ Internet-Draft                    OPRFs                     October 2020
 
 3.4.3.3.  Finalize
 
-
-
-
-
-
-Davidson, et al.          Expires 19 April 2021                [Page 16]
-
-Internet-Draft                    OPRFs                     October 2020
-
-
    Input:
 
      Token token
@@ -910,10 +930,10 @@ Internet-Draft                    OPRFs                     October 2020
 
    def Finalize(token, issuedToken, info):
      finalizeDST = "RFCXXXX-Finalize-" || self.contextString
-     hashInput = len(token.data) || token.data ||
-                 len(issuedToken) || issuedToken ||
-                 len(info) || info ||
-                 len(finalizeDST) || finalizeDST
+     hashInput = I2OSP(len(token.data), 2) || token.data ||
+                 I2OSP(len(issuedToken), 2) || issuedToken ||
+                 I2OSP(len(info), 2) || info ||
+                 I2OSP(len(finalizeDST), 2) || finalizeDST
      return Hash(hashInput)
 
 3.4.4.  VerifiableClientContext
@@ -924,26 +944,6 @@ Internet-Draft                    OPRFs                     October 2020
    It makes use of the helper function "ComputeComposites" described
    above.  It has one helper function, "VerifyProof()", defined below.
 
-3.4.4.1.  VerifyProof
-
-   This algorithm outputs a boolean "verified" which indicates whether
-   the proof inside of the evaluation verifies correctly, or not.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -953,6 +953,11 @@ Davidson, et al.          Expires 19 April 2021                [Page 17]
 
 Internet-Draft                    OPRFs                     October 2020
 
+
+3.4.4.1.  VerifyProof
+
+   This algorithm outputs a boolean "verified" which indicates whether
+   the proof inside of the evaluation verifies correctly, or not.
 
    Input:
 
@@ -966,11 +971,12 @@ Internet-Draft                    OPRFs                     October 2020
 
    def VerifyProof(pkS, blindToken, Ev):
      G = GG.Generator()
+     gen = GG.Serialize(G)
 
      blindTokenList = [blindToken]
      elementList = [Ev.element]
 
-     (a1, a2) = ComputeComposites(pkS, blindTokenList, elementList)
+     (a1, a2) = ComputeComposites(gen, pkS, blindTokenList, elementList)
 
      A' = (Ev.proof[1] * G + Ev.proof[0] * pkS)
      B' = (Ev.proof[1] * M + Ev.proof[0] * Z)
@@ -978,7 +984,8 @@ Internet-Draft                    OPRFs                     October 2020
      a4 = GG.Serialize(B')
 
      challengeDST = "RFCXXXX-challenge-" || self.contextString
-     h2Input = I2OSP(len(pkS), 2) || pkS ||
+     h2Input = I2OSP(len(gen), 2) || gen ||
+               I2OSP(len(pkS), 2) || pkS ||
                I2OSP(len(a1), 2) || a1 ||
                I2OSP(len(a2), 2) || a2 ||
                I2OSP(len(a3), 2) || a3 ||
@@ -990,13 +997,6 @@ Internet-Draft                    OPRFs                     October 2020
      return CT_EQUAL(c, Ev.proof[0])
 
 3.4.4.2.  Unblind
-
-
-
-
-
-
-
 
 
 
