@@ -89,23 +89,23 @@ Table of Contents
        3.4.1.  Server Context  . . . . . . . . . . . . . . . . . . .  11
        3.4.2.  VerifiableServerContext . . . . . . . . . . . . . . .  12
        3.4.3.  Client Context  . . . . . . . . . . . . . . . . . . .  16
-       3.4.4.  VerifiableClientContext . . . . . . . . . . . . . . .  17
-   4.  Ciphersuites  . . . . . . . . . . . . . . . . . . . . . . . .  19
-     4.1.  OPRF(curve25519, SHA-512) . . . . . . . . . . . . . . . .  20
-     4.2.  OPRF(curve448, SHA-512) . . . . . . . . . . . . . . . . .  21
-     4.3.  OPRF(P-256, SHA-512)  . . . . . . . . . . . . . . . . . .  21
-     4.4.  OPRF(P-384, SHA-512)  . . . . . . . . . . . . . . . . . .  22
-     4.5.  OPRF(P-521, SHA-512)  . . . . . . . . . . . . . . . . . .  23
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  24
-     5.1.  Security properties . . . . . . . . . . . . . . . . . . .  24
-     5.2.  Cryptographic security  . . . . . . . . . . . . . . . . .  25
-       5.2.1.  Computational hardness assumptions  . . . . . . . . .  25
-       5.2.2.  Protocol security . . . . . . . . . . . . . . . . . .  26
-       5.2.3.  Q-strong-DH oracle  . . . . . . . . . . . . . . . . .  26
-       5.2.4.  Implications for ciphersuite choices  . . . . . . . .  27
-     5.3.  Hashing to curve  . . . . . . . . . . . . . . . . . . . .  28
-     5.4.  Timing Leaks  . . . . . . . . . . . . . . . . . . . . . .  28
-     5.5.  Key rotation  . . . . . . . . . . . . . . . . . . . . . .  28
+       3.4.4.  VerifiableClientContext . . . . . . . . . . . . . . .  18
+   4.  Ciphersuites  . . . . . . . . . . . . . . . . . . . . . . . .  20
+     4.1.  OPRF(curve25519, SHA-512) . . . . . . . . . . . . . . . .  21
+     4.2.  OPRF(curve448, SHA-512) . . . . . . . . . . . . . . . . .  22
+     4.3.  OPRF(P-256, SHA-512)  . . . . . . . . . . . . . . . . . .  22
+     4.4.  OPRF(P-384, SHA-512)  . . . . . . . . . . . . . . . . . .  23
+     4.5.  OPRF(P-521, SHA-512)  . . . . . . . . . . . . . . . . . .  24
+   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  25
+     5.1.  Security properties . . . . . . . . . . . . . . . . . . .  25
+     5.2.  Cryptographic security  . . . . . . . . . . . . . . . . .  26
+       5.2.1.  Computational hardness assumptions  . . . . . . . . .  26
+       5.2.2.  Protocol security . . . . . . . . . . . . . . . . . .  27
+       5.2.3.  Q-strong-DH oracle  . . . . . . . . . . . . . . . . .  27
+       5.2.4.  Implications for ciphersuite choices  . . . . . . . .  28
+     5.3.  Hashing to curve  . . . . . . . . . . . . . . . . . . . .  29
+     5.4.  Timing Leaks  . . . . . . . . . . . . . . . . . . . . . .  29
+     5.5.  Key rotation  . . . . . . . . . . . . . . . . . . . . . .  29
 
 
 
@@ -114,17 +114,17 @@ Davidson, et al.          Expires 20 April 2021                 [Page 2]
 Internet-Draft                    OPRFs                     October 2020
 
 
-   6.  Additive blinding . . . . . . . . . . . . . . . . . . . . . .  28
-     6.1.  Preprocess  . . . . . . . . . . . . . . . . . . . . . . .  29
-     6.2.  Blind . . . . . . . . . . . . . . . . . . . . . . . . . .  30
-     6.3.  Unblind . . . . . . . . . . . . . . . . . . . . . . . . .  30
-       6.3.1.  Parameter Commitments . . . . . . . . . . . . . . . .  31
-   7.  Contributors  . . . . . . . . . . . . . . . . . . . . . . . .  31
-   8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  32
-   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  32
-     9.1.  Normative References  . . . . . . . . . . . . . . . . . .  32
-     9.2.  Informative References  . . . . . . . . . . . . . . . . .  34
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  34
+   6.  Additive blinding . . . . . . . . . . . . . . . . . . . . . .  29
+     6.1.  Preprocess  . . . . . . . . . . . . . . . . . . . . . . .  30
+     6.2.  Blind . . . . . . . . . . . . . . . . . . . . . . . . . .  31
+     6.3.  Unblind . . . . . . . . . . . . . . . . . . . . . . . . .  31
+       6.3.1.  Parameter Commitments . . . . . . . . . . . . . . . .  32
+   7.  Contributors  . . . . . . . . . . . . . . . . . . . . . . . .  32
+   8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  33
+   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  33
+     9.1.  Normative References  . . . . . . . . . . . . . . . . . .  33
+     9.2.  Informative References  . . . . . . . . . . . . . . . . .  35
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  35
 
 1.  Introduction
 
@@ -743,12 +743,11 @@ Internet-Draft                    OPRFs                     October 2020
 
    def GenerateProof(skS, pkS, blindToken, element)
      G = GG.Generator()
-     gen = GG.Serialize(G)
 
      blindTokenList = [blindToken]
      elementList = [element]
 
-     (a1, a2) = ComputeComposites(gen, pkS, blindTokenList, elementList)
+     (a1, a2) = ComputeComposites(pkS, blindTokenList, elementList)
 
      M = GG.Deserialize(a1)
      r = GG.RandomScalar()
@@ -756,8 +755,7 @@ Internet-Draft                    OPRFs                     October 2020
      a4 = GG.Serialize(r * M)
 
      challengeDST = "RFCXXXX-challenge-" || self.contextString
-     h2Input = I2OSP(len(gen), 2) || gen ||
-               I2OSP(len(pkS), 2) || pkS ||
+     h2Input = I2OSP(len(pkS), 2) || pkS ||
                I2OSP(len(a1), 2) || a1 ||
                I2OSP(len(a2), 2) || a2 ||
                I2OSP(len(a3), 2) || a3 ||
@@ -769,6 +767,25 @@ Internet-Draft                    OPRFs                     October 2020
 
      return (c, s)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Davidson, et al.          Expires 20 April 2021                [Page 14]
+
+Internet-Draft                    OPRFs                     October 2020
+
+
 3.4.2.2.1.  Batching inputs
 
    Unlike other functions, "ComputeComposites" takes lists of inputs,
@@ -778,14 +795,6 @@ Internet-Draft                    OPRFs                     October 2020
    Applications can take advantage of this functionality by invoking
    "GenerateProof" on batches of inputs.  (Notice that in the pseudocode
    above, the single inputs "blindToken" and "element" are translated
-
-
-
-Davidson, et al.          Expires 20 April 2021                [Page 14]
-
-Internet-Draft                    OPRFs                     October 2020
-
-
    into lists before invoking "ComputeComposites".  A batched
    "GenerateProof" variant would permit lists of inputs, and no list
    translation would be needed.)
@@ -802,9 +811,39 @@ Internet-Draft                    OPRFs                     October 2020
 
 3.4.2.3.  ComputeComposites
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Davidson, et al.          Expires 20 April 2021                [Page 15]
+
+Internet-Draft                    OPRFs                     October 2020
+
+
    Input:
 
-     SerializedElement gen
      PublicKey pkS
      SerializedElement blindTokens[m]
      SerializedElement elements[m]
@@ -813,11 +852,10 @@ Internet-Draft                    OPRFs                     October 2020
 
      SerializedElement composites[2]
 
-   def ComputeComposites(gen, pkS, blindTokens, elements):
+   def ComputeComposites(pkS, blindTokens, elements):
      seedDST = "RFCXXXX-seed-" || self.contextString
      compositeDST = "RFCXXXX-composite-" || self.contextString
-     h1Input = I2OSP(len(gen), 2) || gen ||
-               I2OSP(len(pkS), 2) || pkS ||
+     h1Input = I2OSP(len(pkS), 2) || pkS ||
                I2OSP(len(blindTokens), 2) || blindTokens ||
                I2OSP(len(elements), 2) || elements ||
                I2OSP(len(seedDST), 2) || seedDST
@@ -835,13 +873,6 @@ Internet-Draft                    OPRFs                     October 2020
        Z = di * Zi + Z
     return [GG.Serialize(M), GG.Serialize(Z)]
 
-
-
-Davidson, et al.          Expires 20 April 2021                [Page 15]
-
-Internet-Draft                    OPRFs                     October 2020
-
-
 3.4.3.  Client Context
 
    The ClientContext encapsulates the context string constructed during
@@ -853,6 +884,19 @@ Internet-Draft                    OPRFs                     October 2020
    We note here that the blinding mechanism that we use can be modified
    slightly with the opportunity for making performance gains in some
    scenarios.  We detail these modifications in Section 6.
+
+
+
+
+
+
+
+
+
+Davidson, et al.          Expires 20 April 2021                [Page 16]
+
+Internet-Draft                    OPRFs                     October 2020
+
 
    Input:
 
@@ -874,30 +918,6 @@ Internet-Draft                    OPRFs                     October 2020
 
 3.4.3.2.  Unblind
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Davidson, et al.          Expires 20 April 2021                [Page 16]
-
-Internet-Draft                    OPRFs                     October 2020
-
-
    Input:
 
      Token token
@@ -917,6 +937,22 @@ Internet-Draft                    OPRFs                     October 2020
      return issuedToken
 
 3.4.3.3.  Finalize
+
+
+
+
+
+
+
+
+
+
+
+
+Davidson, et al.          Expires 20 April 2021                [Page 17]
+
+Internet-Draft                    OPRFs                     October 2020
+
 
    Input:
 
@@ -944,20 +980,35 @@ Internet-Draft                    OPRFs                     October 2020
    It makes use of the helper function "ComputeComposites" described
    above.  It has one helper function, "VerifyProof()", defined below.
 
-
-
-
-
-
-Davidson, et al.          Expires 20 April 2021                [Page 17]
-
-Internet-Draft                    OPRFs                     October 2020
-
-
 3.4.4.1.  VerifyProof
 
    This algorithm outputs a boolean "verified" which indicates whether
    the proof inside of the evaluation verifies correctly, or not.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Davidson, et al.          Expires 20 April 2021                [Page 18]
+
+Internet-Draft                    OPRFs                     October 2020
+
 
    Input:
 
@@ -971,12 +1022,11 @@ Internet-Draft                    OPRFs                     October 2020
 
    def VerifyProof(pkS, blindToken, Ev):
      G = GG.Generator()
-     gen = GG.Serialize(G)
 
      blindTokenList = [blindToken]
      elementList = [Ev.element]
 
-     (a1, a2) = ComputeComposites(gen, pkS, blindTokenList, elementList)
+     (a1, a2) = ComputeComposites(pkS, blindTokenList, elementList)
 
      A' = (Ev.proof[1] * G + Ev.proof[0] * pkS)
      B' = (Ev.proof[1] * M + Ev.proof[0] * Z)
@@ -984,8 +1034,7 @@ Internet-Draft                    OPRFs                     October 2020
      a4 = GG.Serialize(B')
 
      challengeDST = "RFCXXXX-challenge-" || self.contextString
-     h2Input = I2OSP(len(gen), 2) || gen ||
-               I2OSP(len(pkS), 2) || pkS ||
+     h2Input = I2OSP(len(pkS), 2) || pkS ||
                I2OSP(len(a1), 2) || a1 ||
                I2OSP(len(a2), 2) || a2 ||
                I2OSP(len(a3), 2) || a3 ||
@@ -1005,7 +1054,14 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 20 April 2021                [Page 18]
+
+
+
+
+
+
+
+Davidson, et al.          Expires 20 April 2021                [Page 19]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1061,7 +1117,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 20 April 2021                [Page 19]
+Davidson, et al.          Expires 20 April 2021                [Page 20]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1117,7 +1173,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 20 April 2021                [Page 20]
+Davidson, et al.          Expires 20 April 2021                [Page 21]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1173,7 +1229,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 20 April 2021                [Page 21]
+Davidson, et al.          Expires 20 April 2021                [Page 22]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1229,7 +1285,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 20 April 2021                [Page 22]
+Davidson, et al.          Expires 20 April 2021                [Page 23]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1285,7 +1341,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 20 April 2021                [Page 23]
+Davidson, et al.          Expires 20 April 2021                [Page 24]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1341,7 +1397,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 20 April 2021                [Page 24]
+Davidson, et al.          Expires 20 April 2021                [Page 25]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1397,7 +1453,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 20 April 2021                [Page 25]
+Davidson, et al.          Expires 20 April 2021                [Page 26]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1453,7 +1509,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 20 April 2021                [Page 26]
+Davidson, et al.          Expires 20 April 2021                [Page 27]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1509,7 +1565,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 20 April 2021                [Page 27]
+Davidson, et al.          Expires 20 April 2021                [Page 28]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1565,7 +1621,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 20 April 2021                [Page 28]
+Davidson, et al.          Expires 20 April 2021                [Page 29]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1621,7 +1677,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 20 April 2021                [Page 29]
+Davidson, et al.          Expires 20 April 2021                [Page 30]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1677,7 +1733,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 20 April 2021                [Page 30]
+Davidson, et al.          Expires 20 April 2021                [Page 31]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1733,7 +1789,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 20 April 2021                [Page 31]
+Davidson, et al.          Expires 20 April 2021                [Page 32]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1789,7 +1845,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 20 April 2021                [Page 32]
+Davidson, et al.          Expires 20 April 2021                [Page 33]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1845,7 +1901,7 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 20 April 2021                [Page 33]
+Davidson, et al.          Expires 20 April 2021                [Page 34]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1901,7 +1957,7 @@ Authors' Addresses
 
 
 
-Davidson, et al.          Expires 20 April 2021                [Page 34]
+Davidson, et al.          Expires 20 April 2021                [Page 35]
 
 Internet-Draft                    OPRFs                     October 2020
 
@@ -1957,4 +2013,4 @@ Internet-Draft                    OPRFs                     October 2020
 
 
 
-Davidson, et al.          Expires 20 April 2021                [Page 35]
+Davidson, et al.          Expires 20 April 2021                [Page 36]
