@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-15T00:30:15.127955+00:00",
+  "timestamp": "2020-10-18T00:31:19.880836+00:00",
   "repo": "cfrg/draft-irtf-cfrg-voprf",
   "labels": [
     {
@@ -656,7 +656,7 @@
       "labels": [],
       "body": "- OPRF evaluations for new ciphersuites\r\n- DLEQ evaluations\r\n- Batched DLEQ evaluations",
       "createdAt": "2019-09-30T12:48:12Z",
-      "updatedAt": "2020-01-28T16:20:19Z",
+      "updatedAt": "2020-10-16T13:32:56Z",
       "closedAt": null,
       "comments": [
         {
@@ -665,6 +665,13 @@
           "body": "I've written a proof-of-concept implementation of draft-02 in Go here: https://github.com/alxdavids/voprf-poc. I can use this to generate test vectors for all of the different cases.",
           "createdAt": "2020-01-28T16:20:19Z",
           "updatedAt": "2020-01-28T16:20:19Z"
+        },
+        {
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "So, I think probably the POC in sage can generate the test vectors; but it needs some changes.",
+          "createdAt": "2020-10-16T13:32:56Z",
+          "updatedAt": "2020-10-16T13:32:56Z"
         }
       ]
     },
@@ -1924,15 +1931,15 @@
       "id": "MDU6SXNzdWU3MDc2ODg0NzU=",
       "title": "Use a draft-specific placeholder DST string",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/issues/143",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "davidben",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "If folks deploy experimental systems using VOPRF drafts, the fact that the DST uses \"RFCXXXX\" might break domain separation between drafts. HPKE used to use the same placeholder but switched to \"HPKE-05\", etc., with an RFC editor note:\r\n\r\n> [[RFC editor: please change \"HPKE-05\" to \"RFCXXXX\", where XXXX is the final number, before publication.]]\r\n\r\nSee https://github.com/cfrg/draft-irtf-cfrg-hpke/pull/138.\r\n\r\nPerhaps VOPRF should do something similar here.",
       "createdAt": "2020-09-23T21:22:54Z",
-      "updatedAt": "2020-09-29T14:31:07Z",
-      "closedAt": null,
+      "updatedAt": "2020-10-17T16:09:50Z",
+      "closedAt": "2020-10-17T16:09:50Z",
       "comments": [
         {
           "author": "claucece",
@@ -1987,15 +1994,15 @@
       "id": "MDU6SXNzdWU3MDg5NTgzMjQ=",
       "title": "hashInput in Finalize and VerifyFinalize missing I2OSP calls",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/issues/146",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "davidben",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "hashInput in Finalize and VerifyFinalize is computed as:\r\n\r\n```\r\n  hashInput = len(token.data) || token.data ||\r\n              len(issuedToken) || issuedToken ||\r\n              len(info) || info ||\r\n              len(finalizeDST) || finalizeDST\r\n  return Hash(hashInput)\r\n```\r\n\r\nBut the lengths are integers, not byte strings. I assume this was intended to say `I2OSP(len(...), ???)`. Given h1Input is also passed directly to Hash in ComputeComposites, I guess the lengths should all be two bytes, to be consistent.\r\n\r\n```\r\n  h1Input = I2OSP(len(gen), 2) || gen ||\r\n            I2OSP(len(pkS), 2) || pkS ||\r\n            I2OSP(len(blindTokens), 2) || blindTokens ||\r\n            I2OSP(len(elements), 2) || elements ||\r\n            I2OSP(len(seedDST), 2) || seedDST\r\n  seed = Hash(h1Input)\r\n```\r\n\r\nThough it's worth noting that injectivity here depends on the DSTs being suffix-free, or on *all* the length prefixes having the same size. If, say, hashInput used `I2OSP(len(token.data), 4)`, hashInput and h1Input would no longer be injective for all possible values here. (Ignoring the part where DSTs in this document are suffix-free.)\r\n\r\nThis reminds of https://github.com/cfrg/draft-irtf-cfrg-hash-to-curve/issues/236. (Hrm... do we care about domain separation between the hash calls here and those inside hash-to-curve? That might suggest the DST constructions should match. Although that is really a theoretical issue since the DSTs are indeed suffix-free.)",
       "createdAt": "2020-09-25T13:52:52Z",
-      "updatedAt": "2020-09-29T00:10:28Z",
-      "closedAt": null,
+      "updatedAt": "2020-10-16T14:00:21Z",
+      "closedAt": "2020-10-16T14:00:21Z",
       "comments": [
         {
           "author": "claucece",
@@ -2003,6 +2010,13 @@
           "body": "Yes, I agree on this. I see no place, also, where a different length will be used other than `I2OSP(len(x), 2)`",
           "createdAt": "2020-09-29T00:10:28Z",
           "updatedAt": "2020-09-29T00:10:28Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I fixed this directly on master.",
+          "createdAt": "2020-10-16T14:00:21Z",
+          "updatedAt": "2020-10-16T14:00:21Z"
         }
       ]
     },
@@ -2011,15 +2025,15 @@
       "id": "MDU6SXNzdWU3MDkxODg4ODI=",
       "title": "Necessary to serialize generator?",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/issues/147",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "davidben",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "GenerateProof incorporates `gen = GG.Serialize(G)` into the HashToScalar call, but the context string already includes the cipher suite ID, which covers all the common parameters, notably the generator. It seems to me that can be omitted.",
       "createdAt": "2020-09-25T18:17:54Z",
-      "updatedAt": "2020-09-29T00:14:14Z",
-      "closedAt": null,
+      "updatedAt": "2020-10-17T16:06:52Z",
+      "closedAt": "2020-10-17T16:06:52Z",
       "comments": [
         {
           "author": "claucece",
@@ -2034,6 +2048,20 @@
           "body": "Right, I thought all that needed there was for different suites' hash invocations to use different inputs. The suite is identified by ID, which is hashed, and the generator is specified by the suite, so it seems the generator is covered. \r\n\r\n(Disclaimer: I don't actually know how the formal analyses work, so my intuition could just be totally wrong. :-) )",
           "createdAt": "2020-09-29T00:14:14Z",
           "updatedAt": "2020-09-29T00:14:14Z"
+        },
+        {
+          "author": "armfazh",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "According to the specification [link](https://github.com/privacypass/challenge-bypass-extension/blob/master/docs/PROTOCOL.md#nizk-proofs-of-discrete-log-equality), the pair (G,Y) must be maintained.",
+          "createdAt": "2020-10-16T17:28:01Z",
+          "updatedAt": "2020-10-16T17:28:01Z"
+        },
+        {
+          "author": "davidben",
+          "authorAssociation": "NONE",
+          "body": "Isn't that just a question of whether you believe the pre-agreed parameters are GG or (GG, G). If you believe even GG weren't pre-agreed, I imagine H_3 would need to pass the group in. And when we give a name to an EC group, it typically comes with a pre-agreed generator.\r\n\r\nPut another way, you could define H_3 from the specification as H_3(G,Y,M,Z,A',B') =\r\n- If G == standard_G, return HashToScalar(code_point || Y || M || Z || A' || B')\r\n- Else, return HashToScalar(code_point2 || G || Y || M || Z || A' || B')\r\n\r\nThis is a perfectly injective encoding, as long as we can pick some distinct throwaway code_point2 value. And then you observe that you never hit the second case so we don't need to write it down.",
+          "createdAt": "2020-10-16T19:45:16Z",
+          "updatedAt": "2020-10-16T19:45:16Z"
         }
       ]
     },
@@ -2042,15 +2070,15 @@
       "id": "MDU6SXNzdWU3MDkxOTM2NzM=",
       "title": "Assuming numbers are big-endian",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/issues/148",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "davidben",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "Section 2.2 has two bullet points:\r\n\r\n>   o  We assume that all numbers are stored in big-endian orientation.\r\n>\r\n>   o  I2OSP and OS2IP: Convert a byte array to and from a non-negative\r\n>      integer as described in [RFC8017].  Note that these functions\r\n>      operate on byte arrays in big-endian byte order.\r\n\r\nThe second bullet point makes sense. When converting to and from byte array, you need to specify the endianness. I'm not sure what the first point means at all. Does the draft ever care about the in-memory representation of numbers? It needs to be explicit about I2OSP, etc., anyway to capture lengths (see #145 and #146), at which point I don't think how the number is \"stored\" means anything.",
       "createdAt": "2020-09-25T18:27:06Z",
-      "updatedAt": "2020-09-25T18:27:06Z",
-      "closedAt": null,
+      "updatedAt": "2020-10-17T16:05:56Z",
+      "closedAt": "2020-10-17T16:05:56Z",
       "comments": []
     },
     {
@@ -2174,6 +2202,22 @@
           "updatedAt": "2020-10-08T15:56:26Z"
         }
       ]
+    },
+    {
+      "number": 159,
+      "id": "MDU6SXNzdWU3MjMyMzE4NTc=",
+      "title": "Avoid making the test vectors random at every run",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/issues/159",
+      "state": "OPEN",
+      "author": "claucece",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-10-16T13:35:51Z",
+      "updatedAt": "2020-10-16T13:35:51Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -9808,7 +9852,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2020-10-12T22:43:27Z",
-      "updatedAt": "2020-10-13T18:18:17Z",
+      "updatedAt": "2020-10-16T18:08:51Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-voprf",
       "baseRefName": "master",
       "baseRefOid": "be81e97a16dac7fa0a6b93bda85e8c5d4a934740",
@@ -9828,7 +9872,322 @@
           "updatedAt": "2020-10-13T11:25:17Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTA5NjQxOTc3",
+          "commit": {
+            "abbreviatedOid": "c060030"
+          },
+          "author": "armfazh",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2020-10-15T18:08:18Z",
+          "updatedAt": "2020-10-15T19:19:47Z",
+          "comments": [
+            {
+              "originalPosition": 2,
+              "body": " SHA256 or SHA512 for the suite?",
+              "createdAt": "2020-10-15T18:08:18Z",
+              "updatedAt": "2020-10-15T19:19:47Z"
+            },
+            {
+              "originalPosition": 2,
+              "body": "In the Table 2 of h2c, we only announce `P256_XMD:SHA-256_SSWU_RO_` for P-256. \r\nThis doesn't block us to define an analogous one using SHA512, but I think it's better to stick on the one that is recommended. \r\n\r\n@chris-wood  thoughts?",
+              "createdAt": "2020-10-15T18:13:03Z",
+              "updatedAt": "2020-10-15T19:19:47Z"
+            },
+            {
+              "originalPosition": 5,
+              "body": "You must add the backslash to avoid the loss of underscores in the html converter.\r\n\r\n```suggestion\r\n    \"RFCXXXX-P256_XMD:SHA-512_SSWU_RO\\_\"\r\n```",
+              "createdAt": "2020-10-15T18:21:07Z",
+              "updatedAt": "2020-10-15T19:19:47Z"
+            },
+            {
+              "originalPosition": 58,
+              "body": "Are we using HKDF for voprf? if not, the name of suites could be shortened. \r\n",
+              "createdAt": "2020-10-15T18:24:32Z",
+              "updatedAt": "2020-10-15T19:19:47Z"
+            },
+            {
+              "originalPosition": 240,
+              "body": "Suite field is wrong for verifiable modes.\r\n```sh\r\n$ cat vectors/allVectors.json | jq '.[].\"suite\"'\r\n\"OPRF-P256-HKDF-SHA512-SSWU-RO\"\r\n\"OPRF-P384-HKDF-SHA512-SSWU-RO\"\r\n\"OPRF-P521-HKDF-SHA512-SSWU-RO\"\r\n\"OPRF-P256-HKDF-SHA512-SSWU-RO\"\r\n\"OPRF-P384-HKDF-SHA512-SSWU-RO\"\r\n\"OPRF-P521-HKDF-SHA512-SSWU-RO\"\r\n\r\n```",
+              "createdAt": "2020-10-15T18:31:43Z",
+              "updatedAt": "2020-10-15T19:19:47Z"
+            },
+            {
+              "originalPosition": 241,
+              "body": "It's better a name without spaces on it. \r\n\r\n```suggestion\r\n    \"dst\": \"RFCXXXX-P256_XMD:SHA-512_SSWU_RO_\",\r\n```",
+              "createdAt": "2020-10-15T18:32:28Z",
+              "updatedAt": "2020-10-15T19:19:47Z"
+            },
+            {
+              "originalPosition": 8,
+              "body": "@chris-wood @alxdavids \r\nDoes a single ciphersuite name is intended to support both modes? or do we need to specify identifiers for each mode?",
+              "createdAt": "2020-10-15T18:58:36Z",
+              "updatedAt": "2020-10-15T19:19:47Z"
+            },
+            {
+              "originalPosition": 59,
+              "body": "Test vectors change between runs. It is expected that this script returns the same vectors everytime we run it.",
+              "createdAt": "2020-10-15T19:19:21Z",
+              "updatedAt": "2020-10-15T19:19:47Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTA5OTI1MTA4",
+          "commit": {
+            "abbreviatedOid": "c060030"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-16T00:23:45Z",
+          "updatedAt": "2020-10-16T00:23:45Z",
+          "comments": [
+            {
+              "originalPosition": 59,
+              "body": "Yeah.. it was like that since the beginning of the POC.. and I didn't know if that is what was wanted (as it was there). I can create a 'random scalar generation' function that always return the same valid scalar for creating same test vectors. \r\ncc. @chris-wood ",
+              "createdAt": "2020-10-16T00:23:45Z",
+              "updatedAt": "2020-10-16T00:23:45Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTA5OTI2Njkw",
+          "commit": {
+            "abbreviatedOid": "c060030"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-16T00:24:51Z",
+          "updatedAt": "2020-10-16T00:24:51Z",
+          "comments": [
+            {
+              "originalPosition": 2,
+              "body": "Interesting. Personally, I think it will be better if we use SHA-256, as the size is smaller. But maybe this was targeted for an specific security level that SHA512 gives. Let's discuss tomorrow.",
+              "createdAt": "2020-10-16T00:24:51Z",
+              "updatedAt": "2020-10-16T00:24:51Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTA5OTMyNTIw",
+          "commit": {
+            "abbreviatedOid": "c060030"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-16T00:29:21Z",
+          "updatedAt": "2020-10-16T00:29:22Z",
+          "comments": [
+            {
+              "originalPosition": 240,
+              "body": "Oh, yes. Names get repeated. I'll change.",
+              "createdAt": "2020-10-16T00:29:22Z",
+              "updatedAt": "2020-10-16T00:29:22Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTEwNDc0NDI0",
+          "commit": {
+            "abbreviatedOid": "c060030"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-16T13:33:23Z",
+          "updatedAt": "2020-10-16T13:42:15Z",
+          "comments": [
+            {
+              "originalPosition": 2,
+              "body": "We should go with SHA256!",
+              "createdAt": "2020-10-16T13:33:24Z",
+              "updatedAt": "2020-10-16T13:42:15Z"
+            },
+            {
+              "originalPosition": 58,
+              "body": "Yeah, good catch. We're not using HKDF anymore. ",
+              "createdAt": "2020-10-16T13:41:21Z",
+              "updatedAt": "2020-10-16T13:42:15Z"
+            },
+            {
+              "originalPosition": 59,
+              "body": "We can make them deterministic, but let's do that in a separate change.",
+              "createdAt": "2020-10-16T13:41:32Z",
+              "updatedAt": "2020-10-16T13:42:15Z"
+            },
+            {
+              "originalPosition": 34,
+              "body": "```suggestion\r\n        vector[\"dst\"] = client.suite.dst\r\n```",
+              "createdAt": "2020-10-16T13:42:07Z",
+              "updatedAt": "2020-10-16T13:42:15Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTEwNjk3MTQ4",
+          "commit": {
+            "abbreviatedOid": "c060030"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-16T18:08:51Z",
+          "updatedAt": "2020-10-16T18:08:51Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "Got it ;)",
+              "createdAt": "2020-10-16T18:08:51Z",
+              "updatedAt": "2020-10-16T18:08:51Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 160,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTA0ODU5NjI1",
+      "title": "Remove note about big endian storage.",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/pull/160",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #148.",
+      "createdAt": "2020-10-16T13:41:05Z",
+      "updatedAt": "2020-10-17T16:05:56Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-voprf",
+      "baseRefName": "master",
+      "baseRefOid": "be81e97a16dac7fa0a6b93bda85e8c5d4a934740",
+      "headRepository": "cfrg/draft-irtf-cfrg-voprf",
+      "headRefName": "caw/remove-endian-note",
+      "headRefOid": "e4c47a0548803a3288629565ed465df72007e758",
+      "closedAt": "2020-10-17T16:05:56Z",
+      "mergedAt": "2020-10-17T16:05:56Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "6557b831a3f9f6fd745daea7bc31cd9551c3def3"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTEwOTU5ODk3",
+          "commit": {
+            "abbreviatedOid": "e4c47a0"
+          },
+          "author": "alxdavids",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-17T07:53:42Z",
+          "updatedAt": "2020-10-17T07:53:42Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 161,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTA0ODY3NzEy",
+      "title": "Change placeholder DST.",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/pull/161",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #143.\r\n\r\ncc @davidben",
+      "createdAt": "2020-10-16T13:51:42Z",
+      "updatedAt": "2020-10-17T16:09:51Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-voprf",
+      "baseRefName": "master",
+      "baseRefOid": "4cb07ebc3c98bf1324a7dda0e2ec224a4327ee13",
+      "headRepository": "cfrg/draft-irtf-cfrg-voprf",
+      "headRefName": "caw/change-dst",
+      "headRefOid": "638df93e14794724400988b38caee5155ec35b88",
+      "closedAt": "2020-10-17T16:09:50Z",
+      "mergedAt": "2020-10-17T16:09:50Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "4338efd66ce5f513e4acefaaa48d470c22f16dfa"
+      },
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "That's already in the change:\r\n\r\n```\r\n[[RFC editor: please change \"VOPRF05\" to \"RFCXXXX\", where XXXX is the final number, here and elsewhere before publication.]]\r\n```",
+          "createdAt": "2020-10-17T16:07:20Z",
+          "updatedAt": "2020-10-17T16:07:20Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTEwOTU5ODQw",
+          "commit": {
+            "abbreviatedOid": "02e2835"
+          },
+          "author": "alxdavids",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Looks good! Do we need something like this somewhere:\r\n\r\n> \r\n\r\n    [[RFC editor: please change \"HPKE-05\" to \"RFCXXXX\", where XXXX is the final number, before publication.]]\r\n\r\nas mentioned in #143?",
+          "createdAt": "2020-10-17T07:52:31Z",
+          "updatedAt": "2020-10-17T07:52:31Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 162,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTA0ODcxMzAy",
+      "title": "Remove serialized generator from the context string.",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/pull/162",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The suite ID covers this value, so it's not necessary to include in the hash input.\r\n\r\nCloses #147.\r\n\r\nThanks, @davidben!",
+      "createdAt": "2020-10-16T13:57:12Z",
+      "updatedAt": "2020-10-17T16:06:52Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-voprf",
+      "baseRefName": "master",
+      "baseRefOid": "6557b831a3f9f6fd745daea7bc31cd9551c3def3",
+      "headRepository": "cfrg/draft-irtf-cfrg-voprf",
+      "headRefName": "caw/remove-serialized-gen",
+      "headRefOid": "e067eca1103880a399b8607efa0883438da7c259",
+      "closedAt": "2020-10-17T16:06:52Z",
+      "mergedAt": "2020-10-17T16:06:52Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "4cb07ebc3c98bf1324a7dda0e2ec224a4327ee13"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTEwOTU5ODg1",
+          "commit": {
+            "abbreviatedOid": "8744204"
+          },
+          "author": "alxdavids",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-17T07:53:19Z",
+          "updatedAt": "2020-10-17T07:53:19Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
