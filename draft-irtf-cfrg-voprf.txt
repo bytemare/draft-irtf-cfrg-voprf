@@ -91,9 +91,9 @@ Table of Contents
        3.4.3.  Client Context  . . . . . . . . . . . . . . . . . . .  16
        3.4.4.  VerifiableClientContext . . . . . . . . . . . . . . .  18
    4.  Ciphersuites  . . . . . . . . . . . . . . . . . . . . . . . .  20
-     4.1.  OPRF(curve25519, SHA-512) . . . . . . . . . . . . . . . .  21
+     4.1.  OPRF(curve25519, SHA-256) . . . . . . . . . . . . . . . .  21
      4.2.  OPRF(curve448, SHA-512) . . . . . . . . . . . . . . . . .  22
-     4.3.  OPRF(P-256, SHA-512)  . . . . . . . . . . . . . . . . . .  22
+     4.3.  OPRF(P-256, SHA-256)  . . . . . . . . . . . . . . . . . .  22
      4.4.  OPRF(P-384, SHA-512)  . . . . . . . . . . . . . . . . . .  23
      4.5.  OPRF(P-521, SHA-512)  . . . . . . . . . . . . . . . . . .  24
    5.  Security Considerations . . . . . . . . . . . . . . . . . . .  25
@@ -1128,7 +1128,7 @@ Internet-Draft                    OPRFs                     October 2020
    [[OPEN ISSUE: Replace Curve25519 and Curve448 with Ristretto and
    Decaf]]
 
-4.1.  OPRF(curve25519, SHA-512)
+4.1.  OPRF(curve25519, SHA-256)
 
    *  Group:
 
@@ -1145,13 +1145,13 @@ Internet-Draft                    OPRFs                     October 2020
       -  Order(): Returns "1000000000000000000000000000000014DEF9DEA2F79
          CD65812631A5CF5D3ED"
 
-      -  HashToGroup(): curve25519_XMD:SHA-512_ELL2_RO_
+      -  HashToGroup(): curve25519_XMD:SHA-256_ELL2_RO_
          [I-D.irtf-cfrg-hash-to-curve] with DST "VOPRF05-
-         curve25519_XMD:SHA-512_ELL2_RO_"
+         curve25519_XMD:SHA-256_ELL2_RO_"
 
       -  HashToScalar(): Use hash_to_field from
          [I-D.irtf-cfrg-hash-to-curve] using Order() as the prime
-         modulus, with L=48, and expand_message_xmd with SHA-512.
+         modulus, with L=48, and expand_message_xmd with SHA-256.
 
       -  Serialization: The standard 32-byte representation of the
          public key [RFC7748]
@@ -1164,7 +1164,7 @@ Internet-Draft                    OPRFs                     October 2020
          subgroup of the curve.  This can be done by scalar multiplying
          the point by Order() and checking whether it's zero.
 
-   *  Hash: SHA-512
+   *  Hash: SHA-256
 
    *  ID: 0x0001
 
@@ -1219,7 +1219,7 @@ Internet-Draft                    OPRFs                     October 2020
 
    *  ID: 0x0002
 
-4.3.  OPRF(P-256, SHA-512)
+4.3.  OPRF(P-256, SHA-256)
 
    *  Group:
 
@@ -1252,7 +1252,7 @@ Internet-Draft                    OPRFs                     October 2020
 
       -  HashToScalar(): Use hash_to_field from
          [I-D.irtf-cfrg-hash-to-curve] using Order() as the prime
-         modulus, with L=48, and expand_message_xmd with SHA-512.
+         modulus, with L=48, and expand_message_xmd with SHA-256.
 
       -  Serialization: The compressed point encoding for the curve
          [SEC1] consisting of 33 bytes.
@@ -1263,7 +1263,7 @@ Internet-Draft                    OPRFs                     October 2020
       -  Scalar multiplication: Scalar multiplication of curve points
          directly corresponds with scalar multiplication in the group.
 
-   *  Hash: SHA-512
+   *  Hash: SHA-256
 
    *  ID: 0x0003
 
