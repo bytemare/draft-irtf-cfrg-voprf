@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-18T00:31:19.880836+00:00",
+  "timestamp": "2020-10-20T00:31:18.251093+00:00",
   "repo": "cfrg/draft-irtf-cfrg-voprf",
   "labels": [
     {
@@ -2157,9 +2157,17 @@
       "labels": [],
       "body": "Some applications will need to compute the full PRF on the server side, e.g., to precompute a bunch of OPRF outputs for use in private set intersection protocols. Can we consider adding to the server context API a FullEvaluate, along lines of:\r\n\r\nInput:\r\n\r\n  ClientInput input\r\n  opaque info<1..2^16-1>\r\n  PrivateKey skS\r\n  PublicKey pkS\r\n\r\nOutput:\r\n\r\n  opaque output<1..2^16-1>\r\n\r\ndef FullEvaluate(input, info, skS, pkS):\r\n  P = GG.HashToGroup(input)\r\n  N = skS * P\r\n  issuedToken = GG.serialize(N)\r\n  finalizeDST = \"RFCXXXX-Finalize-\" || self.contextString\r\n  hashInput = len(input) || input ||\r\n              len(issuedToken) || issuedToken ||\r\n              len(info) || info ||\r\n              len(finalizeDST) || finalizeDST\r\n  return Hash(hashInput)",
       "createdAt": "2020-09-29T18:12:40Z",
-      "updatedAt": "2020-09-29T18:12:40Z",
+      "updatedAt": "2020-10-18T19:31:04Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "This should also be added to the POC.",
+          "createdAt": "2020-10-18T19:31:04Z",
+          "updatedAt": "2020-10-18T19:31:04Z"
+        }
+      ]
     },
     {
       "number": 155,
@@ -2175,7 +2183,7 @@
       "labels": [],
       "body": "HashToScalar points to hash-to-field, but we should specify the modulus. See the relevant text in the draft:\r\n\r\n> The hash_to_field function is also suitable for securely hashing to scalars. For example, when hashing to scalars for an elliptic curve (sub)group with prime order r, it suffices to instantiate hash_to_curve with target field GF(r).",
       "createdAt": "2020-10-02T14:24:29Z",
-      "updatedAt": "2020-10-02T14:24:33Z",
+      "updatedAt": "2020-10-19T14:12:15Z",
       "closedAt": null,
       "comments": []
     },
@@ -2208,14 +2216,70 @@
       "id": "MDU6SXNzdWU3MjMyMzE4NTc=",
       "title": "Avoid making the test vectors random at every run",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/issues/159",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "claucece",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2020-10-16T13:35:51Z",
-      "updatedAt": "2020-10-16T13:35:51Z",
+      "updatedAt": "2020-10-19T16:23:07Z",
+      "closedAt": "2020-10-19T16:23:07Z",
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fixed in #166.",
+          "createdAt": "2020-10-19T16:23:07Z",
+          "updatedAt": "2020-10-19T16:23:07Z"
+        }
+      ]
+    },
+    {
+      "number": 163,
+      "id": "MDU6SXNzdWU3MjQwNzg0NDk=",
+      "title": "Specify the usage of decaf and ristretto",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/issues/163",
+      "state": "OPEN",
+      "author": "claucece",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-10-18T19:19:42Z",
+      "updatedAt": "2020-10-18T19:19:42Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 164,
+      "id": "MDU6SXNzdWU3MjQwODEwMDY=",
+      "title": "Change curve 25519 and curve 448 to ed25519 and ed448",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/issues/164",
+      "state": "OPEN",
+      "author": "claucece",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "It should follow the parameters defined for the edwards curves, as defined in RFC7748.\r\n\r\nThis is kind of related to #142 and #163 (as it should specify the encoding to be used).\r\n\r\ncc./ @armfazh @chris-wood ",
+      "createdAt": "2020-10-18T19:33:30Z",
+      "updatedAt": "2020-10-18T19:33:30Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 165,
+      "id": "MDU6SXNzdWU3MjQxMTkzNjA=",
+      "title": "Does the 'dst' for the HashToCurve func need to be different for each mode?",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/issues/165",
+      "state": "OPEN",
+      "author": "claucece",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-10-18T20:59:06Z",
+      "updatedAt": "2020-10-18T20:59:06Z",
       "closedAt": null,
       "comments": []
     }
@@ -9845,24 +9909,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTAxODU5Mjk0",
       "title": "Create new test vectors",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/pull/158",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "claucece",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2020-10-12T22:43:27Z",
-      "updatedAt": "2020-10-16T18:08:51Z",
+      "updatedAt": "2020-10-19T16:26:01Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-voprf",
       "baseRefName": "master",
-      "baseRefOid": "be81e97a16dac7fa0a6b93bda85e8c5d4a934740",
+      "baseRefOid": "f4d1a6586609184e930ba35d698698c72a8062c4",
       "headRepository": "claucece/draft-irtf-cfrg-voprf",
       "headRefName": "master",
-      "headRefOid": "c060030ccc2c59a59aa89e6439e8da6f9cdd9f98",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "54dd331ce9a3854c8c94ee4b19884e5491abb0c0",
+      "closedAt": "2020-10-19T16:26:01Z",
+      "mergedAt": "2020-10-19T16:26:01Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "37afd613897bfbd722ada6d126f0ea8bcf9da0d9"
+      },
       "comments": [
         {
           "author": "claucece",
@@ -9870,6 +9936,13 @@
           "body": "cc. @chris-wood and @armfazh . ",
           "createdAt": "2020-10-13T11:25:17Z",
           "updatedAt": "2020-10-13T11:25:17Z"
+        },
+        {
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@armfazh @chris-wood please, take a look at this.",
+          "createdAt": "2020-10-18T20:59:27Z",
+          "updatedAt": "2020-10-18T20:59:27Z"
         }
       ],
       "reviews": [
@@ -9889,49 +9962,49 @@
               "originalPosition": 2,
               "body": " SHA256 or SHA512 for the suite?",
               "createdAt": "2020-10-15T18:08:18Z",
-              "updatedAt": "2020-10-15T19:19:47Z"
+              "updatedAt": "2020-10-19T15:43:29Z"
             },
             {
               "originalPosition": 2,
               "body": "In the Table 2 of h2c, we only announce `P256_XMD:SHA-256_SSWU_RO_` for P-256. \r\nThis doesn't block us to define an analogous one using SHA512, but I think it's better to stick on the one that is recommended. \r\n\r\n@chris-wood  thoughts?",
               "createdAt": "2020-10-15T18:13:03Z",
-              "updatedAt": "2020-10-15T19:19:47Z"
+              "updatedAt": "2020-10-19T15:43:29Z"
             },
             {
               "originalPosition": 5,
               "body": "You must add the backslash to avoid the loss of underscores in the html converter.\r\n\r\n```suggestion\r\n    \"RFCXXXX-P256_XMD:SHA-512_SSWU_RO\\_\"\r\n```",
               "createdAt": "2020-10-15T18:21:07Z",
-              "updatedAt": "2020-10-15T19:19:47Z"
+              "updatedAt": "2020-10-19T15:43:29Z"
             },
             {
               "originalPosition": 58,
               "body": "Are we using HKDF for voprf? if not, the name of suites could be shortened. \r\n",
               "createdAt": "2020-10-15T18:24:32Z",
-              "updatedAt": "2020-10-15T19:19:47Z"
+              "updatedAt": "2020-10-19T15:43:29Z"
             },
             {
               "originalPosition": 240,
               "body": "Suite field is wrong for verifiable modes.\r\n```sh\r\n$ cat vectors/allVectors.json | jq '.[].\"suite\"'\r\n\"OPRF-P256-HKDF-SHA512-SSWU-RO\"\r\n\"OPRF-P384-HKDF-SHA512-SSWU-RO\"\r\n\"OPRF-P521-HKDF-SHA512-SSWU-RO\"\r\n\"OPRF-P256-HKDF-SHA512-SSWU-RO\"\r\n\"OPRF-P384-HKDF-SHA512-SSWU-RO\"\r\n\"OPRF-P521-HKDF-SHA512-SSWU-RO\"\r\n\r\n```",
               "createdAt": "2020-10-15T18:31:43Z",
-              "updatedAt": "2020-10-15T19:19:47Z"
+              "updatedAt": "2020-10-19T15:43:29Z"
             },
             {
               "originalPosition": 241,
               "body": "It's better a name without spaces on it. \r\n\r\n```suggestion\r\n    \"dst\": \"RFCXXXX-P256_XMD:SHA-512_SSWU_RO_\",\r\n```",
               "createdAt": "2020-10-15T18:32:28Z",
-              "updatedAt": "2020-10-15T19:19:47Z"
+              "updatedAt": "2020-10-19T15:43:29Z"
             },
             {
               "originalPosition": 8,
               "body": "@chris-wood @alxdavids \r\nDoes a single ciphersuite name is intended to support both modes? or do we need to specify identifiers for each mode?",
               "createdAt": "2020-10-15T18:58:36Z",
-              "updatedAt": "2020-10-15T19:19:47Z"
+              "updatedAt": "2020-10-19T15:43:29Z"
             },
             {
               "originalPosition": 59,
               "body": "Test vectors change between runs. It is expected that this script returns the same vectors everytime we run it.",
               "createdAt": "2020-10-15T19:19:21Z",
-              "updatedAt": "2020-10-15T19:19:47Z"
+              "updatedAt": "2020-10-19T15:43:29Z"
             }
           ]
         },
@@ -9951,7 +10024,7 @@
               "originalPosition": 59,
               "body": "Yeah.. it was like that since the beginning of the POC.. and I didn't know if that is what was wanted (as it was there). I can create a 'random scalar generation' function that always return the same valid scalar for creating same test vectors. \r\ncc. @chris-wood ",
               "createdAt": "2020-10-16T00:23:45Z",
-              "updatedAt": "2020-10-16T00:23:45Z"
+              "updatedAt": "2020-10-19T15:43:29Z"
             }
           ]
         },
@@ -9971,7 +10044,7 @@
               "originalPosition": 2,
               "body": "Interesting. Personally, I think it will be better if we use SHA-256, as the size is smaller. But maybe this was targeted for an specific security level that SHA512 gives. Let's discuss tomorrow.",
               "createdAt": "2020-10-16T00:24:51Z",
-              "updatedAt": "2020-10-16T00:24:51Z"
+              "updatedAt": "2020-10-19T15:43:29Z"
             }
           ]
         },
@@ -9991,7 +10064,7 @@
               "originalPosition": 240,
               "body": "Oh, yes. Names get repeated. I'll change.",
               "createdAt": "2020-10-16T00:29:22Z",
-              "updatedAt": "2020-10-16T00:29:22Z"
+              "updatedAt": "2020-10-19T15:43:29Z"
             }
           ]
         },
@@ -10011,25 +10084,25 @@
               "originalPosition": 2,
               "body": "We should go with SHA256!",
               "createdAt": "2020-10-16T13:33:24Z",
-              "updatedAt": "2020-10-16T13:42:15Z"
+              "updatedAt": "2020-10-19T15:43:29Z"
             },
             {
               "originalPosition": 58,
               "body": "Yeah, good catch. We're not using HKDF anymore. ",
               "createdAt": "2020-10-16T13:41:21Z",
-              "updatedAt": "2020-10-16T13:42:15Z"
+              "updatedAt": "2020-10-19T15:43:29Z"
             },
             {
               "originalPosition": 59,
               "body": "We can make them deterministic, but let's do that in a separate change.",
               "createdAt": "2020-10-16T13:41:32Z",
-              "updatedAt": "2020-10-16T13:42:15Z"
+              "updatedAt": "2020-10-19T15:43:29Z"
             },
             {
               "originalPosition": 34,
               "body": "```suggestion\r\n        vector[\"dst\"] = client.suite.dst\r\n```",
               "createdAt": "2020-10-16T13:42:07Z",
-              "updatedAt": "2020-10-16T13:42:15Z"
+              "updatedAt": "2020-10-19T15:43:29Z"
             }
           ]
         },
@@ -10049,9 +10122,200 @@
               "originalPosition": 5,
               "body": "Got it ;)",
               "createdAt": "2020-10-16T18:08:51Z",
-              "updatedAt": "2020-10-16T18:08:51Z"
+              "updatedAt": "2020-10-19T15:43:29Z"
             }
           ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTExMTczNTky",
+          "commit": {
+            "abbreviatedOid": "c060030"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-18T19:18:33Z",
+          "updatedAt": "2020-10-18T19:18:33Z",
+          "comments": [
+            {
+              "originalPosition": 2,
+              "body": "Ok ;)",
+              "createdAt": "2020-10-18T19:18:33Z",
+              "updatedAt": "2020-10-19T15:43:29Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTExMTczODQ2",
+          "commit": {
+            "abbreviatedOid": "c060030"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-18T19:21:43Z",
+          "updatedAt": "2020-10-18T19:21:43Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "Changed ;)",
+              "createdAt": "2020-10-18T19:21:43Z",
+              "updatedAt": "2020-10-19T15:43:29Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTExMTc0MDAy",
+          "commit": {
+            "abbreviatedOid": "c060030"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-18T19:23:43Z",
+          "updatedAt": "2020-10-18T19:23:43Z",
+          "comments": [
+            {
+              "originalPosition": 59,
+              "body": "I'll do that in another PR.",
+              "createdAt": "2020-10-18T19:23:43Z",
+              "updatedAt": "2020-10-19T15:43:29Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTExMjAwMjMz",
+          "commit": {
+            "abbreviatedOid": "a070f6a"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-18T20:59:09Z",
+          "updatedAt": "2020-10-18T20:59:10Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "I'll open an issue for tracking this.",
+              "createdAt": "2020-10-18T20:59:09Z",
+              "updatedAt": "2020-10-19T15:43:29Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTExNzkxMDAx",
+          "commit": {
+            "abbreviatedOid": "a070f6a"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2020-10-19T13:58:30Z",
+          "updatedAt": "2020-10-19T13:59:59Z",
+          "comments": [
+            {
+              "originalPosition": 72,
+              "body": "Why are these separate? The only difference between VOPRF and OPRF the mode, right?",
+              "createdAt": "2020-10-19T13:58:30Z",
+              "updatedAt": "2020-10-19T15:43:29Z"
+            },
+            {
+              "originalPosition": 72,
+              "body": "(I recommend deleting them)",
+              "createdAt": "2020-10-19T13:58:50Z",
+              "updatedAt": "2020-10-19T15:43:29Z"
+            },
+            {
+              "originalPosition": 22,
+              "body": "Why is \"Point\" needed?",
+              "createdAt": "2020-10-19T13:59:21Z",
+              "updatedAt": "2020-10-19T15:43:29Z"
+            },
+            {
+              "originalPosition": 60,
+              "body": "I'd revert this change. ",
+              "createdAt": "2020-10-19T13:59:54Z",
+              "updatedAt": "2020-10-19T15:43:29Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTExODkxMzY3",
+          "commit": {
+            "abbreviatedOid": "a070f6a"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-19T15:31:16Z",
+          "updatedAt": "2020-10-19T15:31:17Z",
+          "comments": [
+            {
+              "originalPosition": 60,
+              "body": "OK. ",
+              "createdAt": "2020-10-19T15:31:17Z",
+              "updatedAt": "2020-10-19T15:43:29Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTExODkzMTc3",
+          "commit": {
+            "abbreviatedOid": "a070f6a"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-19T15:33:03Z",
+          "updatedAt": "2020-10-19T15:33:04Z",
+          "comments": [
+            {
+              "originalPosition": 72,
+              "body": "Yes.. it was manly to address a comment by @armfazh that the names of the ciphersuites do not reflect the mode, as, in the past, it was only: `OPRF-P256-SHA256-SSWU-RO`. I'll delete them.",
+              "createdAt": "2020-10-19T15:33:03Z",
+              "updatedAt": "2020-10-19T15:43:29Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTExODk0MTA1",
+          "commit": {
+            "abbreviatedOid": "a070f6a"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-19T15:33:59Z",
+          "updatedAt": "2020-10-19T15:33:59Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "Not really needed. It was for debugging.",
+              "createdAt": "2020-10-19T15:33:59Z",
+              "updatedAt": "2020-10-19T15:43:29Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTExOTQzMTE2",
+          "commit": {
+            "abbreviatedOid": "54dd331"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-19T16:25:56Z",
+          "updatedAt": "2020-10-19T16:25:56Z",
+          "comments": []
         }
       ]
     },
@@ -10188,6 +10452,68 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 166,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTA2MDQwMzE3",
+      "title": "Fix a seed used to derive all test vectors.",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/pull/166",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "cc @claucece ",
+      "createdAt": "2020-10-19T14:41:42Z",
+      "updatedAt": "2020-10-19T16:22:51Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-voprf",
+      "baseRefName": "master",
+      "baseRefOid": "f4d1a6586609184e930ba35d698698c72a8062c4",
+      "headRepository": "cfrg/draft-irtf-cfrg-voprf",
+      "headRefName": "caw/deterministic-seeds",
+      "headRefOid": "89533bc9afc896c4a49210c35ea8ae930acf6bda",
+      "closedAt": "2020-10-19T16:22:50Z",
+      "mergedAt": "2020-10-19T16:22:50Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "ed52d45b15f428dfba77b4b71c7828106f06ea27"
+      },
+      "comments": [
+        {
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thank you! Looks great.",
+          "createdAt": "2020-10-19T15:44:25Z",
+          "updatedAt": "2020-10-19T15:44:25Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 167,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTA2MzA5NTE5",
+      "title": "Make vectors deterministic",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/pull/167",
+      "state": "CLOSED",
+      "author": "claucece",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This fixes the deterministic seed, as apparently it has to be used immediately before calling any other random module function: https://pynative.com/python-random-seed/ \r\n\r\ncc./ @chris-wood ",
+      "createdAt": "2020-10-19T22:11:09Z",
+      "updatedAt": "2020-10-19T22:33:43Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-voprf",
+      "baseRefName": "master",
+      "baseRefOid": "37afd613897bfbd722ada6d126f0ea8bcf9da0d9",
+      "headRepository": "claucece/draft-irtf-cfrg-voprf",
+      "headRefName": "master",
+      "headRefOid": "7643dec44db39f8f5d0825fd855666832a5f5f26",
+      "closedAt": "2020-10-19T22:33:43Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
