@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-20T00:31:18.251093+00:00",
+  "timestamp": "2020-10-22T00:31:38.362137+00:00",
   "repo": "cfrg/draft-irtf-cfrg-voprf",
   "labels": [
     {
@@ -1777,9 +1777,17 @@
       "labels": [],
       "body": "The following is an optimization for `ComputeComposites` function when\r\nexecuted at the server-side. The savings reduce by half the number of\r\nscalar multiplications (group exponentiations).\r\n\r\nFull details at https://mailarchive.ietf.org/arch/msg/cfrg/dt8TUtTD-JVgVxjpEL9lz5wUTb8/",
       "createdAt": "2020-07-14T19:26:04Z",
-      "updatedAt": "2020-07-14T19:26:04Z",
+      "updatedAt": "2020-10-20T14:27:29Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I'll add this first to the POC to see that everything works nicely, and then add to the draft. I'll add the note here also that this is *only for the server side*.",
+          "createdAt": "2020-10-20T14:27:29Z",
+          "updatedAt": "2020-10-20T14:27:29Z"
+        }
+      ]
     },
     {
       "number": 135,
@@ -2247,25 +2255,69 @@
       "labels": [],
       "body": "",
       "createdAt": "2020-10-18T19:19:42Z",
-      "updatedAt": "2020-10-18T19:19:42Z",
+      "updatedAt": "2020-10-21T13:53:02Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Copying this from #164:\r\n\r\nSure thing. As a read in the current draft, ristretto255 is an instantiation of the abstract prime-order group Curve25519, and it is using it's order, as defined in RFC7748.\r\nThe base point is a base point (I think the ed25519 one) encoded in a Ristretto way: e2f2ae0a 6abc4e71 a884a961 c500515f 58e30b6a a582dd8d b6a65945 e08d2d76, and internally using ed25519 operations for scalarmul and others (and, therefore, internally using the ed25519 base point).\r\n\r\nI'm not sure why it is specified:\r\n\r\n```\r\nThe group order is the same as the order of the Curve25519 primeorder\r\nsubgroup:\r\nl = 2^252 + 27742317777372353535851937790883648493\r\nand not directly the edwards one.\r\n```\r\n\r\nJust noting it here, as we need to specify the generator for Generator(), for internal edwards operations. Although, decoding the ristretto encoding into edwards should do the trick.\r\n\r\nI'm not sure if the authors are going to specify in a different way the addition, negation, and the derived subtraction and (multi-)scalar multiplication, but I'll follow the ed25519 ones.\r\n\r\nOn decaf448, they are using edwards448 as defined RFC7748.",
+          "createdAt": "2020-10-21T13:52:27Z",
+          "updatedAt": "2020-10-21T13:52:27Z"
+        },
+        {
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "cc./ @armfazh @chris-wood ",
+          "createdAt": "2020-10-21T13:53:02Z",
+          "updatedAt": "2020-10-21T13:53:02Z"
+        }
+      ]
     },
     {
       "number": 164,
       "id": "MDU6SXNzdWU3MjQwODEwMDY=",
       "title": "Change curve 25519 and curve 448 to ed25519 and ed448",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/issues/164",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "claucece",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "It should follow the parameters defined for the edwards curves, as defined in RFC7748.\r\n\r\nThis is kind of related to #142 and #163 (as it should specify the encoding to be used).\r\n\r\ncc./ @armfazh @chris-wood ",
       "createdAt": "2020-10-18T19:33:30Z",
-      "updatedAt": "2020-10-18T19:33:30Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2020-10-21T13:52:47Z",
+      "closedAt": "2020-10-21T13:52:46Z",
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "We should close this and just move directly to ristretto255 and decaf448. @armfazh, please close if you agree!",
+          "createdAt": "2020-10-20T00:32:06Z",
+          "updatedAt": "2020-10-20T00:32:06Z"
+        },
+        {
+          "author": "armfazh",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "agree, let's move forward with those groups",
+          "createdAt": "2020-10-20T07:05:47Z",
+          "updatedAt": "2020-10-20T07:05:47Z"
+        },
+        {
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Sure thing. As a read in the current [draft](https://datatracker.ietf.org/doc/draft-irtf-cfrg-ristretto255-decaf448/),  ristretto255 is an instantiation of the abstract prime-order group Curve25519, and it is using it's order, as defined in RFC7748. \r\nThe base point is a base point (I think the ed25519 one) encoded in a Ristretto way: `e2f2ae0a 6abc4e71 a884a961 c500515f 58e30b6a a582dd8d b6a65945 e08d2d76`, and internally using ed25519 operations for scalarmul and others (and, therefore, internally using the ed25519 base point). \r\n\r\nI'm not sure why it is specified:\r\n\r\n```\r\nThe group order is the same as the order of the Curve25519 primeorder\r\nsubgroup:\r\nl = 2^252 + 27742317777372353535851937790883648493\r\n```\r\n\r\nand not directly the edwards one. \r\n\r\nJust noting it here, as we need to specify the generator for `Generator()`, for internal edwards operations. Although, decoding the ristretto encoding into edwards should do the trick.\r\n\r\nI'm not sure if the authors are going to specify in a different way the addition, negation, and the derived subtraction and (multi-)scalar multiplication, but I'll follow the ed25519 ones.\r\n\r\nOn decaf448, they are using edwards448 as defined RFC7748.\r\n",
+          "createdAt": "2020-10-21T13:51:03Z",
+          "updatedAt": "2020-10-21T13:51:03Z"
+        },
+        {
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Closing this. See #163 ",
+          "createdAt": "2020-10-21T13:52:46Z",
+          "updatedAt": "2020-10-21T13:52:46Z"
+        }
+      ]
     },
     {
       "number": 165,
@@ -2279,7 +2331,31 @@
       "labels": [],
       "body": "",
       "createdAt": "2020-10-18T20:59:06Z",
-      "updatedAt": "2020-10-18T20:59:06Z",
+      "updatedAt": "2020-10-20T00:35:20Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "There are several ways we could achieve domain separation. For consistency with the other functions, I'd recommend augmenting the input to `HashToGroup` with a DST, e.g.:\r\n\r\n```\r\ndef Blind(input):\r\n  r = GG.RandomScalar()\r\n  blindDST = \"VOPRF05-Finalize-\" || self.contextString\r\n  P = GG.HashToGroup(input || I2OSP(len(blindDST), 2) || blindDST)\r\n```\r\n\r\n@alxdavids, what do you think?",
+          "createdAt": "2020-10-20T00:35:07Z",
+          "updatedAt": "2020-10-20T00:35:20Z"
+        }
+      ]
+    },
+    {
+      "number": 168,
+      "id": "MDU6SXNzdWU3MjUwODE1Nzc=",
+      "title": "Allow server context creation with external key pair",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/issues/168",
+      "state": "OPEN",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "In some cases it's useful to use a pre-existing key pair for a server context. Currently, keys are generated inline (in SetupBaseServer, for example). We should fix that.",
+      "createdAt": "2020-10-20T00:31:37Z",
+      "updatedAt": "2020-10-20T00:31:37Z",
       "closedAt": null,
       "comments": []
     }
@@ -10509,6 +10585,32 @@
       "headRefName": "master",
       "headRefOid": "7643dec44db39f8f5d0825fd855666832a5f5f26",
       "closedAt": "2020-10-19T22:33:43Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 169,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTA2ODUzMDgw",
+      "title": "[WIP] Address issues in the draft",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/pull/169",
+      "state": "OPEN",
+      "author": "claucece",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-10-20T14:30:33Z",
+      "updatedAt": "2020-10-20T14:30:39Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-voprf",
+      "baseRefName": "master",
+      "baseRefOid": "37afd613897bfbd722ada6d126f0ea8bcf9da0d9",
+      "headRepository": "claucece/draft-irtf-cfrg-voprf",
+      "headRefName": "master",
+      "headRefOid": "f691c04dcf6959e70bc20d5eeaa1ab7682712f8d",
+      "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
