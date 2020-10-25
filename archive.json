@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-22T00:31:38.362137+00:00",
+  "timestamp": "2020-10-25T00:33:15.966162+00:00",
   "repo": "cfrg/draft-irtf-cfrg-voprf",
   "labels": [
     {
@@ -2134,15 +2134,15 @@
       "id": "MDU6SXNzdWU3MTEyMDI2MDk=",
       "title": "How and when should the public key be generated?",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/issues/153",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "claucece",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "While it is easy to assume how and when the public key is generated, there is no place in the draft that states so. Must be good to include its generation on the setup functions.",
       "createdAt": "2020-09-29T15:00:49Z",
-      "updatedAt": "2020-09-29T15:03:18Z",
-      "closedAt": null,
+      "updatedAt": "2020-10-22T22:38:48Z",
+      "closedAt": "2020-10-22T22:38:48Z",
       "comments": [
         {
           "author": "claucece",
@@ -2150,6 +2150,13 @@
           "body": "it should probably be included here:\r\n\r\n```\r\ndef SetupBaseServer(suite):\r\n  (skS, _) = KeyGen(GG)\r\n  contextString = I2OSP(modeBase, 1) || I2OSP(suite.ID, 2)\r\n  return ServerContext(contextString, skS)\r\n\r\n```",
           "createdAt": "2020-09-29T15:03:18Z",
           "updatedAt": "2020-09-29T15:03:18Z"
+        },
+        {
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "This is solved now.",
+          "createdAt": "2020-10-22T22:38:46Z",
+          "updatedAt": "2020-10-22T22:38:46Z"
         }
       ]
     },
@@ -2200,15 +2207,15 @@
       "id": "MDU6SXNzdWU3MTczOTAwMzA=",
       "title": "Clarify the serialization to be used",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-voprf/issues/157",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "claucece",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Specially, the tag to be used.",
       "createdAt": "2020-10-08T14:19:52Z",
-      "updatedAt": "2020-10-08T15:56:26Z",
-      "closedAt": null,
+      "updatedAt": "2020-10-22T22:44:39Z",
+      "closedAt": "2020-10-22T22:44:39Z",
       "comments": [
         {
           "author": "armfazh",
@@ -2216,6 +2223,13 @@
           "body": "I think this is implementation-dependant. most implementations follow ANSI X9.62.",
           "createdAt": "2020-10-08T15:56:26Z",
           "updatedAt": "2020-10-08T15:56:26Z"
+        },
+        {
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Yeah. I agree on this. Closing it.",
+          "createdAt": "2020-10-22T22:44:39Z",
+          "updatedAt": "2020-10-22T22:44:39Z"
         }
       ]
     },
@@ -2331,7 +2345,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2020-10-18T20:59:06Z",
-      "updatedAt": "2020-10-20T00:35:20Z",
+      "updatedAt": "2020-10-23T17:53:26Z",
       "closedAt": null,
       "comments": [
         {
@@ -2340,6 +2354,20 @@
           "body": "There are several ways we could achieve domain separation. For consistency with the other functions, I'd recommend augmenting the input to `HashToGroup` with a DST, e.g.:\r\n\r\n```\r\ndef Blind(input):\r\n  r = GG.RandomScalar()\r\n  blindDST = \"VOPRF05-Finalize-\" || self.contextString\r\n  P = GG.HashToGroup(input || I2OSP(len(blindDST), 2) || blindDST)\r\n```\r\n\r\n@alxdavids, what do you think?",
           "createdAt": "2020-10-20T00:35:07Z",
           "updatedAt": "2020-10-20T00:35:20Z"
+        },
+        {
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Mmm.. on some of the functions, this make  some sense. In others, we can add:\r\n\r\n```\r\ndef VerifyFinalize(skS, input, info, output):\r\n  DST = self.contextString\r\n  T = GG.HashToGroup(input || dst)\r\n  (...)\r\n\r\n```\r\n\r\nbut, the hash-to-group draft specifies a minimum of 16 bytes and that it is recommended that the suite id is included in the dst. \r\n\r\n```\r\n   2.  Tags MUST have nonzero length.  A minimum length of 16 bytes is\r\n       RECOMMENDED to reduce the chance of collisions with other\r\n       applications.\r\n   6.  For applications that use multiple encodings, either to the same\r\n       curve or to different curves, each encoding MUST use a different\r\n       tag.  For this purpose, it is RECOMMENDED to include the\r\n       encoding's Suite ID (Section 8) in the domain separation tag.\r\n       For independent encodings based on the same suite, each tag\r\n       should also include a distinct identifier, e.g., \"ENC1\" and\r\n       \"ENC2\".\r\n```\r\n\r\nSo, something like this can be used:\r\n\r\n```\r\ndst = VOPRF05-self.contextString-P521_XMD:SHA-512_SSWU_RO\\_`, depending on the suite id\r\n```\r\n",
+          "createdAt": "2020-10-23T16:11:00Z",
+          "updatedAt": "2020-10-23T16:11:00Z"
+        },
+        {
+          "author": "armfazh",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Let's step back for a second,\r\ngiven a named suite, say e.g.  `id = \"OPRF(P256,SHA256)\" ` \r\n\r\ndoes this identifier considers the implementation of both verifiable and non-verifiable modes?\r\n\r\n- if so, \r\n -- then the `dst` used for HashToGroup could be the concatenation of suite id and the mode.\r\n- otherwise,\r\n -- `OPRF(P256,SHA256)` means only the non-verifiable mode, then we need a suite identifier for the verifiable mode, for example `VOPRF(P256,SHA256)`. Going this way,  `dst` can be equal to the suite id.\r\n",
+          "createdAt": "2020-10-23T17:53:26Z",
+          "updatedAt": "2020-10-23T17:53:26Z"
         }
       ]
     },
@@ -2355,9 +2383,24 @@
       "labels": [],
       "body": "In some cases it's useful to use a pre-existing key pair for a server context. Currently, keys are generated inline (in SetupBaseServer, for example). We should fix that.",
       "createdAt": "2020-10-20T00:31:37Z",
-      "updatedAt": "2020-10-20T00:31:37Z",
+      "updatedAt": "2020-10-23T19:20:16Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "armfazh",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "The purpose of Setup is to generate keys and domain parameters, and this should run once during the _offline_ phase of the protocol.\r\nThere is no inline generation during the _online_ phase of the protocol.Hence, I think the specification is right.\r\n\r\n-- If needed, we could add a line saying: \"users can use pre-existing keys provided that keys were generated using a compatible  procedure as the one described in Setup\".\r\n",
+          "createdAt": "2020-10-23T19:14:15Z",
+          "updatedAt": "2020-10-23T19:14:15Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> -- If needed, we could add a line saying: \"users can use pre-existing keys provided that keys were generated using a compatible procedure as the one described in Setup\".\r\n\r\nThis is precisely the idea! It's definitely needed for OPAQUE.",
+          "createdAt": "2020-10-23T19:20:16Z",
+          "updatedAt": "2020-10-23T19:20:16Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -10603,19 +10646,611 @@
       "labels": [],
       "body": "",
       "createdAt": "2020-10-20T14:30:33Z",
-      "updatedAt": "2020-10-20T14:30:39Z",
+      "updatedAt": "2020-10-23T22:12:53Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-voprf",
       "baseRefName": "master",
       "baseRefOid": "37afd613897bfbd722ada6d126f0ea8bcf9da0d9",
       "headRepository": "claucece/draft-irtf-cfrg-voprf",
       "headRefName": "master",
-      "headRefOid": "f691c04dcf6959e70bc20d5eeaa1ab7682712f8d",
+      "headRefOid": "be56001f443003619650341263beea8ab42f8084",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
-      "reviews": []
+      "comments": [
+        {
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@armfazh @chris-wood please, review until here prior to me changing the poc vectors.",
+          "createdAt": "2020-10-23T18:53:24Z",
+          "updatedAt": "2020-10-23T18:53:24Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@claucece is this now ready for a full review, or is it still WIP?",
+          "createdAt": "2020-10-23T19:23:39Z",
+          "updatedAt": "2020-10-23T19:23:39Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1MTI4NDU3",
+          "commit": {
+            "abbreviatedOid": "dae1265"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2020-10-22T21:21:11Z",
+          "updatedAt": "2020-10-22T21:26:44Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "```suggestion\r\n  - Name: ristretto255 {{RISTRETTO}}\r\n```",
+              "createdAt": "2020-10-22T21:21:11Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            },
+            {
+              "originalPosition": 26,
+              "body": "Can we reference the relevant hash-to-curve section in the document?",
+              "createdAt": "2020-10-22T21:21:39Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            },
+            {
+              "originalPosition": 41,
+              "body": "Can we simply reference the [`Encode`](https://tools.ietf.org/html/draft-irtf-cfrg-ristretto255-decaf448-00#section-4.3.2) and `Decode` APIs? We shouldn't specify anything else, I think. ",
+              "createdAt": "2020-10-22T21:23:25Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            },
+            {
+              "originalPosition": 9,
+              "body": "```suggestion\r\n```",
+              "createdAt": "2020-10-22T21:24:22Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            },
+            {
+              "originalPosition": 60,
+              "body": "```suggestion\r\n```",
+              "createdAt": "2020-10-22T21:24:31Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            },
+            {
+              "originalPosition": 41,
+              "body": "(DItto for decaf448)",
+              "createdAt": "2020-10-22T21:24:46Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            },
+            {
+              "originalPosition": 26,
+              "body": "Those sections are [here for ristretto255](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-10#appendix-B) and [here for decaf448](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-10#appendix-C)",
+              "createdAt": "2020-10-22T21:25:52Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1MTYzMjgw",
+          "commit": {
+            "abbreviatedOid": "dae1265"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-22T22:27:19Z",
+          "updatedAt": "2020-10-22T22:27:19Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "ok ;)",
+              "createdAt": "2020-10-22T22:27:19Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1MTY0NTk4",
+          "commit": {
+            "abbreviatedOid": "dae1265"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-22T22:30:19Z",
+          "updatedAt": "2020-10-22T22:30:20Z",
+          "comments": [
+            {
+              "originalPosition": 41,
+              "body": "For elements (or points), yes, there is no need of anything but the encode and decode. But for scalars, these are not the functions specified for them. That is why I added a serialization of them in accordance with the Ristretto draft.",
+              "createdAt": "2020-10-22T22:30:20Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1MTY0NzU4",
+          "commit": {
+            "abbreviatedOid": "dae1265"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-22T22:30:44Z",
+          "updatedAt": "2020-10-22T22:30:44Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "Ok.",
+              "createdAt": "2020-10-22T22:30:44Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1MTY0ODI1",
+          "commit": {
+            "abbreviatedOid": "dae1265"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-22T22:30:53Z",
+          "updatedAt": "2020-10-22T22:30:54Z",
+          "comments": [
+            {
+              "originalPosition": 60,
+              "body": "Ok.",
+              "createdAt": "2020-10-22T22:30:53Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1MjIyMzIx",
+          "commit": {
+            "abbreviatedOid": "7c7e506"
+          },
+          "author": "armfazh",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-23T01:32:41Z",
+          "updatedAt": "2020-10-23T01:32:42Z",
+          "comments": [
+            {
+              "originalPosition": 41,
+              "body": "Serialization of scalars is mostly universal, since they are positive numbers less than group order. Then implementor can just call I2OSP \r\n\r\n",
+              "createdAt": "2020-10-23T01:32:42Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1ODU1ODc1",
+          "commit": {
+            "abbreviatedOid": "3a82a9d"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-23T17:10:50Z",
+          "updatedAt": "2020-10-23T17:10:50Z",
+          "comments": [
+            {
+              "originalPosition": 41,
+              "body": "Removed now. ",
+              "createdAt": "2020-10-23T17:10:50Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1OTI3ODMx",
+          "commit": {
+            "abbreviatedOid": "c4ccb5a"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-23T18:53:01Z",
+          "updatedAt": "2020-10-23T18:53:01Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "Done :)",
+              "createdAt": "2020-10-23T18:53:01Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1ODg2ODEx",
+          "commit": {
+            "abbreviatedOid": "e0b3d26"
+          },
+          "author": "armfazh",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "Some comments",
+          "createdAt": "2020-10-23T17:56:51Z",
+          "updatedAt": "2020-10-23T18:53:47Z",
+          "comments": [
+            {
+              "originalPosition": 83,
+              "body": "display all numbers in hex na dprefix them with 0x,\r\nso people don't confuse numbers with bytes.",
+              "createdAt": "2020-10-23T17:56:51Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            },
+            {
+              "originalPosition": 87,
+              "body": "```suggestion\r\n    The byte encoding of the generator is:\r\n```",
+              "createdAt": "2020-10-23T17:59:25Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            },
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\n- Order(): Outputs the order of GG (i.e. `p`).\r\n```",
+              "createdAt": "2020-10-23T18:06:02Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            },
+            {
+              "originalPosition": 16,
+              "body": "```suggestion\r\n  defined in {{I-D.irtf-cfrg-hash-to-curve}} setting the target field to GF(p).\r\n```",
+              "createdAt": "2020-10-23T18:09:10Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            },
+            {
+              "originalPosition": 26,
+              "body": "In the spec, the Setup functions are called once, so they are in charge to generate keys. \r\nOtherwise, you also need to specify how those keys were generated.\r\n",
+              "createdAt": "2020-10-23T18:11:35Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            },
+            {
+              "originalPosition": 36,
+              "body": "revert this",
+              "createdAt": "2020-10-23T18:11:57Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            },
+            {
+              "originalPosition": 130,
+              "body": "```suggestion\r\n  - Deserialization: Converts a valid 32-byte string to \r\n    a group element by using the 'Decode' function from {{!RISTRETTO}}.\r\n```",
+              "createdAt": "2020-10-23T18:15:18Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            },
+            {
+              "originalPosition": 128,
+              "body": "```suggestion\r\n  - Serialization: Converts a group element to a 32-byte string \r\n    using the 'Encode' function from {{!RISTRETTO}}.\r\n```",
+              "createdAt": "2020-10-23T18:16:15Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            },
+            {
+              "originalPosition": 115,
+              "body": "Following Appendix B of hash to curve draft.\r\nit might be:  VOPRF05-ristretto25519\\_XMD:SHA-256\\_RS255MAP\\_RO\\_",
+              "createdAt": "2020-10-23T18:51:46Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            },
+            {
+              "originalPosition": 204,
+              "body": "likewise `VOPRF05-decaf448_XMD:SHA-512_D448MAP_RO_`",
+              "createdAt": "2020-10-23T18:53:21Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1OTMyMTMy",
+          "commit": {
+            "abbreviatedOid": "4b7692a"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-23T18:59:55Z",
+          "updatedAt": "2020-10-23T18:59:55Z",
+          "comments": [
+            {
+              "originalPosition": 87,
+              "body": "Ok.",
+              "createdAt": "2020-10-23T18:59:55Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1OTMyNTAx",
+          "commit": {
+            "abbreviatedOid": "4b7692a"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-23T19:00:30Z",
+          "updatedAt": "2020-10-23T19:00:30Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "Ok.",
+              "createdAt": "2020-10-23T19:00:30Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1OTMyNzk4",
+          "commit": {
+            "abbreviatedOid": "4b7692a"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-23T19:01:00Z",
+          "updatedAt": "2020-10-23T19:01:00Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "Ok.",
+              "createdAt": "2020-10-23T19:01:00Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1OTMzNTE3",
+          "commit": {
+            "abbreviatedOid": "4b7692a"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-23T19:02:12Z",
+          "updatedAt": "2020-10-23T19:02:12Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "Mmm.. this was trying to solve: https://github.com/cfrg/draft-irtf-cfrg-voprf/issues/168.. what do you suggest instead?",
+              "createdAt": "2020-10-23T19:02:12Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1OTM0MzE0",
+          "commit": {
+            "abbreviatedOid": "4b7692a"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-23T19:03:34Z",
+          "updatedAt": "2020-10-23T19:03:35Z",
+          "comments": [
+            {
+              "originalPosition": 130,
+              "body": "Ok.",
+              "createdAt": "2020-10-23T19:03:34Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1OTM0ODQ3",
+          "commit": {
+            "abbreviatedOid": "4b7692a"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-23T19:04:26Z",
+          "updatedAt": "2020-10-23T19:04:26Z",
+          "comments": [
+            {
+              "originalPosition": 128,
+              "body": "Ok.",
+              "createdAt": "2020-10-23T19:04:26Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1OTM0OTQ1",
+          "commit": {
+            "abbreviatedOid": "4b7692a"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-23T19:04:35Z",
+          "updatedAt": "2020-10-23T19:04:36Z",
+          "comments": [
+            {
+              "originalPosition": 115,
+              "body": "Solved.",
+              "createdAt": "2020-10-23T19:04:36Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1OTM0OTky",
+          "commit": {
+            "abbreviatedOid": "4b7692a"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-23T19:04:40Z",
+          "updatedAt": "2020-10-23T19:04:41Z",
+          "comments": [
+            {
+              "originalPosition": 204,
+              "body": "Solved.",
+              "createdAt": "2020-10-23T19:04:41Z",
+              "updatedAt": "2020-10-23T19:09:09Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1OTM3NTk5",
+          "commit": {
+            "abbreviatedOid": "be56001"
+          },
+          "author": "claucece",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-23T19:09:13Z",
+          "updatedAt": "2020-10-23T19:09:13Z",
+          "comments": [
+            {
+              "originalPosition": 83,
+              "body": "Solved. ",
+              "createdAt": "2020-10-23T19:09:13Z",
+              "updatedAt": "2020-10-23T19:09:13Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1OTQ0Mzg3",
+          "commit": {
+            "abbreviatedOid": "be56001"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-23T19:21:02Z",
+          "updatedAt": "2020-10-23T19:21:03Z",
+          "comments": [
+            {
+              "originalPosition": 36,
+              "body": "No, please don't revert this. We need to allow context setup using external keys. This is needed for OPAQUE.",
+              "createdAt": "2020-10-23T19:21:02Z",
+              "updatedAt": "2020-10-23T19:21:03Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1OTQ0NDg5",
+          "commit": {
+            "abbreviatedOid": "be56001"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-23T19:21:12Z",
+          "updatedAt": "2020-10-23T19:21:13Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "This is fine as-is. Please keep it.",
+              "createdAt": "2020-10-23T19:21:12Z",
+              "updatedAt": "2020-10-23T19:21:13Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1OTQ0OTMx",
+          "commit": {
+            "abbreviatedOid": "be56001"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-23T19:22:03Z",
+          "updatedAt": "2020-10-23T19:22:03Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE1OTUwMTUz",
+          "commit": {
+            "abbreviatedOid": "be56001"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-23T19:31:06Z",
+          "updatedAt": "2020-10-23T19:31:06Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "Let's remove this line, and assert that `skS` is valid in the text. We can then say that `KeyGen` is used to generate `skS` (and `pkS` for the verifiable mode) and passed to `SetupBaseServer` when needed.",
+              "createdAt": "2020-10-23T19:31:06Z",
+              "updatedAt": "2020-10-23T19:31:06Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE2MDM3NDQw",
+          "commit": {
+            "abbreviatedOid": "be56001"
+          },
+          "author": "armfazh",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-23T22:11:33Z",
+          "updatedAt": "2020-10-23T22:11:33Z",
+          "comments": [
+            {
+              "originalPosition": 218,
+              "body": "```suggestion\r\n    directly corresponds with scalar multiplication in the Edwards curve.\r\n```",
+              "createdAt": "2020-10-23T22:11:33Z",
+              "updatedAt": "2020-10-23T22:11:33Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE2MDM3NjI2",
+          "commit": {
+            "abbreviatedOid": "be56001"
+          },
+          "author": "armfazh",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-23T22:12:07Z",
+          "updatedAt": "2020-10-23T22:12:08Z",
+          "comments": [
+            {
+              "originalPosition": 178,
+              "body": "```suggestion\r\n    directly corresponds with scalar multiplication in the Edwards curve.\r\n```",
+              "createdAt": "2020-10-23T22:12:07Z",
+              "updatedAt": "2020-10-23T22:12:08Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE2MDM3ODY4",
+          "commit": {
+            "abbreviatedOid": "be56001"
+          },
+          "author": "armfazh",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-23T22:12:53Z",
+          "updatedAt": "2020-10-23T22:12:53Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
